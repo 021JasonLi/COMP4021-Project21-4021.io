@@ -4,16 +4,69 @@
     <title>4021.io</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- <link href="style.css" rel="stylesheet"> -->
+    <link href="style.css" rel="stylesheet">
 </head>
 <body>
-    4021.io
+    <div id="game-over-page" class="col">
+        game over page
+    </div>
+
+    <div id="game-play-page" class="col">
+        game play page
+    </div>
+
+    <div id="game-front-page" class="col">
+        game front page
+    </div>
+
+    <div id="signin-overlay" class="overlay row">
+        <div class="content shadow row">
+            <form id="signin-form" class="col">
+                <div class="caption">SIGN IN WITH YOUR ACCOUNT</div>
+                <div class="spacer-0"></div>
+                <input id="signin-username" placeholder="Enter your username"></input>
+                <input id="signin-password" type="password" placeholder="Enter your password"></input>
+                <div class="spacer-0"></div>
+                <button type="submit">Sign In</button>
+                <div id="signin-message" class="warning center"></div>
+                <div class="spacer-grow"></div>
+            </form>
+
+            <div class="spacer-0"></div>
+
+            <form id="register-form" class="col">
+                <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
+                <div class="spacer-0"></div>
+                <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
+                <!-- <select id="register-avatar">
+                    <option value="">Select your avatar</option>
+                </select> -->
+                <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
+                <input id="register-password" type="password" placeholder="Enter your password"></input>
+                <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
+                <div class="spacer-0"></div>
+                <button type="submit">Register</button>
+                <div id="register-message" class="warning center"></div>
+            </form>
+        </div>
+    </div>
 
     <script src="/socket.io/socket.io.min.js"></script>
     <!-- More scripts to be inserted -->
     <script>
     $(document).ready(function() {
         console.log("Page Loaded");
+        // $("#signin-overlay").hide();
+        $("#game-over-page").hide();
+        $("#game-play-page").hide();
+        setTimeout(() => { 
+            $("#game-front-page").hide();
+            $("#game-play-page").show();
+            setTimeout(() => {
+                $("#game-play-page").hide();
+                $("#game-over-page").show();
+            }, 2000);
+        }, 2000);
     });
     </script>
 </body>
