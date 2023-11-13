@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>4021.io</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
+
 <body>
     <div id="game-over-page" class="col">
         game over page
@@ -56,34 +58,35 @@
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
     <script>
-    $(document).ready(function() {
-        console.log("Page Loaded");
-        $("#game-over-page").hide();
-        $("#game-play-page").hide();
+        $(document).ready(function () {
+            console.log("Page Loaded");
+            $("#game-over-page").hide();
+            $("#game-play-page").hide();
 
-        // Initialize the UI
-        UI.initialize();
+            // Initialize the UI
+            UI.initialize();
 
-        // Validate the signin
-        Authentication.validate(
-            () => {
-                SignInForm.hide();
-                // Socket.connect();
-            },
-            () => { SignInForm.show(); }
-        );
+            // Validate the signin
+            Authentication.validate(
+                () => {
+                    SignInForm.hide();
+                    // Socket.connect();
+                },
+                () => { SignInForm.show(); }
+            );
 
-        // Below: Debug use only
-        // setTimeout(() => { 
-        //     $("#game-front-page").hide();
-        //     $("#game-play-page").show();
-        //     setTimeout(() => {
-        //         $("#game-play-page").hide();
-        //         $("#game-over-page").show();
-        //     }, 2000);
-        // }, 2000);
-        // Above: Debug use only
-    });
+            // Below: Debug use only
+            // setTimeout(() => { 
+            //     $("#game-front-page").hide();
+            //     $("#game-play-page").show();
+            //     setTimeout(() => {
+            //         $("#game-play-page").hide();
+            //         $("#game-over-page").show();
+            //     }, 2000);
+            // }, 2000);
+            // Above: Debug use only
+        });
     </script>
 </body>
+
 </html>
