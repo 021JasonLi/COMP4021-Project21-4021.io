@@ -52,21 +52,37 @@
     </div>
 
     <script src="/socket.io/socket.io.min.js"></script>
-    <!-- More scripts to be inserted -->
+    <script src="scripts/ui.js"></script>
+    <script src="scripts/registration.js"></script>
+    <script src="scripts/authentication.js"></script>
     <script>
     $(document).ready(function() {
         console.log("Page Loaded");
-        // $("#signin-overlay").hide();
         $("#game-over-page").hide();
         $("#game-play-page").hide();
-        setTimeout(() => { 
-            $("#game-front-page").hide();
-            $("#game-play-page").show();
-            setTimeout(() => {
-                $("#game-play-page").hide();
-                $("#game-over-page").show();
-            }, 2000);
-        }, 2000);
+
+        // Initialize the UI
+        UI.initialize();
+
+        // Validate the signin
+        Authentication.validate(
+            () => {
+                SignInForm.hide();
+                // Socket.connect();
+            },
+            () => { SignInForm.show(); }
+        );
+
+        // Below: Debug use only
+        // setTimeout(() => { 
+        //     $("#game-front-page").hide();
+        //     $("#game-play-page").show();
+        //     setTimeout(() => {
+        //         $("#game-play-page").hide();
+        //         $("#game-over-page").show();
+        //     }, 2000);
+        // }, 2000);
+        // Above: Debug use only
     });
     </script>
 </body>
