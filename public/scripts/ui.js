@@ -74,6 +74,15 @@ const GameFrontPage = (function() {
     const initialize = function() {
         // Hide the user panel
         userPanelHide();
+        // Disable the ready button
+        $("#ready-button").prop("disabled", true);
+
+        // Click event for the ready button
+        $("#ready-button").on("click", () => {
+            console.log("HAHA");
+            // Send a ready request
+            Socket.ready();
+        });
 
         // Click event for the signout button
         $("#signout-button").on("click", () => {
@@ -89,7 +98,7 @@ const GameFrontPage = (function() {
     }
 
     // This function shows the user panel
-    const userPanelShow = function(user) {
+    const userPanelShow = function() {
         $("#user-panel").show();
     };
 
@@ -116,49 +125,35 @@ const GameFrontPage = (function() {
 		// Get the current user
         const currentUser = Authentication.getUser();
         // Add the user one-by-one
+        let everyoneReady = true;
         for (const username in onlineUsers) {
             if (username != currentUser.username) {
-                if (onlineUsers[username].ready){
-                    onlineUsersArea.append(
-                        $("<div id='username-" + username + "'></div>")
-                            .append(UI.getUserDisplay(onlineUsers[username]))
-                    );
-                }
-                else {
-                    onlineUsersArea.append(
-                        $("<div id='username-" + username + "'></div>")
-                            .append(UI.getUserDisplay(onlineUsers[username]))
-                    );
-                }
+                onlineUsersArea.append(
+                    $("<div id='username-" + username + "'></div>")
+                        .append(UI.getUserDisplay(onlineUsers[username]))
+                );
+            }
+            if (!onlineUsers[username].ready) {
+                everyoneReady = false;
+                break;
             }
         }
+        // Enable the ready button if there is at least two user, or disable it otherwise
+        if (Object.keys(onlineUsers).length >= 2) {
+            $("#ready-button").prop("disabled", false);
+        }
+        else {
+            $("#ready-button").prop("disabled", true);
+        }
+        // If everyone is ready, then start the game
+        if (everyoneReady) {
+            console.log("Everyone is ready!");
+        }
+
     };
 
-    // This function adds a user in the panel
-	const onlineUserPanelAddUser = function(user) {
-        const onlineUsersArea = $("#online-users-area");
-		// Find the user
-		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		// Add the user
-		if (userDiv.length == 0) {
-			onlineUsersArea.append(
-				$("<div id='username-" + user.username + "'></div>")
-					.append(UI.getUserDisplay(user))
-			);
-		}
-	};
-
-    // This function removes a user from the panel
-	const onlineUserPanelRemoveUser = function(user) {
-        const onlineUsersArea = $("#online-users-area");
-		// Find the user
-		const userDiv = onlineUsersArea.find("#username-" + user.username);
-		// Remove the user
-		if (userDiv.length > 0) userDiv.remove();
-	};
-
     return { initialize, userPanelShow, userPanelHide, userPanelUpdate, 
-        onlineUserPanelUpdate, onlineUserPanelAddUser, onlineUserPanelRemoveUser };
+        onlineUserPanelUpdate };
 })();
 
 const GamePlayPage = (function() {

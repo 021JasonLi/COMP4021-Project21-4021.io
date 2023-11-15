@@ -24,19 +24,6 @@ const Socket = (function() {
             GameFrontPage.onlineUserPanelUpdate(onlineUsers);
         });
 
-        // Set up the add user event
-        socket.on("add user", (user) => {
-            user = JSON.parse(user);
-            // Add the online user
-            GameFrontPage.onlineUserPanelAddUser(user);
-        });
-
-        // Set up the remove user event
-        socket.on("remove user", (user) => {
-            user = JSON.parse(user);
-            // Remove the online user
-            GameFrontPage.onlineUserPanelRemoveUser(user);
-        });
     };
 
     // This function disconnects the socket from the server
@@ -45,5 +32,10 @@ const Socket = (function() {
         socket = null;
     };
 
-    return { getSocket, connect, disconnect };
+    // This function sends a ready event to the server
+    const ready = function() {
+        socket.emit("ready");
+    }
+
+    return { getSocket, connect, disconnect, ready };
 })();
