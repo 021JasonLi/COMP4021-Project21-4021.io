@@ -19,7 +19,7 @@ const SignInForm = (function() {
                     hide();
                     GameFrontPage.userPanelUpdate(Authentication.getUser());
                     GameFrontPage.userPanelShow();
-                    // Socket.connect();
+                    Socket.connect();
                 },
                 (error) => { $("#signin-message").text(error); }
             );
@@ -80,7 +80,7 @@ const GameFrontPage = (function() {
             // Send a signout request
             Authentication.signout(
                 () => {
-                    // Socket.disconnect(); 
+                    Socket.disconnect(); 
                     userPanelHide();
                     SignInForm.show();
                 }
@@ -108,7 +108,49 @@ const GameFrontPage = (function() {
         }
     };
 
-    return { initialize, userPanelShow, userPanelHide, userPanelUpdate };
+    // This function updates the online users panel
+    const onlineUserPanelUpdate = function(onlineUsers) {
+        const onlineUsersArea = $("#online-users-area");
+        // Clear the online users area
+        onlineUsersArea.empty();
+		// Get the current user
+        const currentUser = Authentication.getUser();
+        // Add the user one-by-one
+        for (const username in onlineUsers) {
+            if (username != currentUser.username) {
+                onlineUsersArea.append(
+                    $("<div id='username-" + username + "'></div>")
+                        .append(UI.getUserDisplay(onlineUsers[username]))
+                );
+            }
+        }
+    };
+
+    // This function adds a user in the panel
+	const onlineUserPanelAddUser = function(user) {
+        const onlineUsersArea = $("#online-users-area");
+		// Find the user
+		const userDiv = onlineUsersArea.find("#username-" + user.username);
+		// Add the user
+		if (userDiv.length == 0) {
+			onlineUsersArea.append(
+				$("<div id='username-" + user.username + "'></div>")
+					.append(UI.getUserDisplay(user))
+			);
+		}
+	};
+
+    // This function removes a user from the panel
+	const onlineUserPanelRemoveUser = function(user) {
+        const onlineUsersArea = $("#online-users-area");
+		// Find the user
+		const userDiv = onlineUsersArea.find("#username-" + user.username);
+		// Remove the user
+		if (userDiv.length > 0) userDiv.remove();
+	};
+
+    return { initialize, userPanelShow, userPanelHide, userPanelUpdate, 
+        onlineUserPanelUpdate, onlineUserPanelAddUser, onlineUserPanelRemoveUser };
 })();
 
 const GamePlayPage = (function() {

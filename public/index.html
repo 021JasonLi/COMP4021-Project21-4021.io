@@ -75,6 +75,7 @@
     <script src="scripts/ui.js"></script>
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
+    <script src="scripts/socket.js"></script>
     <script>
         $(document).ready(function () {
             console.log("Page Loaded");
@@ -86,7 +87,7 @@
             Authentication.validate(
                 () => {
                     SignInForm.hide();
-                    // Socket.connect();
+                    Socket.connect();
                 },
                 () => { SignInForm.show(); }
             );
