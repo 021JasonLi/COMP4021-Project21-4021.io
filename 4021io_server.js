@@ -162,7 +162,8 @@ io.on("connection", (socket) => {
     if (socket.request.session.user) {
         // Add a new user to the online user list
         onlineUsers[socket.request.session.user.username] = {
-            name: socket.request.session.user.name
+            name: socket.request.session.user.name,
+            ready: false
         };
         // Broadcast to all clients to add user
         io.emit("add user", JSON.stringify(socket.request.session.user));

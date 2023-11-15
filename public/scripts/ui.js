@@ -118,10 +118,18 @@ const GameFrontPage = (function() {
         // Add the user one-by-one
         for (const username in onlineUsers) {
             if (username != currentUser.username) {
-                onlineUsersArea.append(
-                    $("<div id='username-" + username + "'></div>")
-                        .append(UI.getUserDisplay(onlineUsers[username]))
-                );
+                if (onlineUsers[username].ready){
+                    onlineUsersArea.append(
+                        $("<div id='username-" + username + "'></div>")
+                            .append(UI.getUserDisplay(onlineUsers[username]))
+                    );
+                }
+                else {
+                    onlineUsersArea.append(
+                        $("<div id='username-" + username + "'></div>")
+                            .append(UI.getUserDisplay(onlineUsers[username]))
+                    );
+                }
             }
         }
     };
@@ -178,8 +186,14 @@ const GameOverPage = (function() {
 const UI = (function() {
     // This function gets the user display
     const getUserDisplay = function(user) {
-        return $("<div class='field-content row shadow'></div>")
-            .append($("<span class='user-name'>" + user.name + "</span>"));
+        if (user.ready) {
+            return $("<div class='field-content row shadow'></div>")
+                .append($("<span class='user-name'>" + user.name + " &#9989; READY!" + "</span>"))
+        }
+        else {
+            return $("<div class='field-content row shadow'></div>")
+                .append($("<span class='user-name'>" + user.name + "</span>"));
+        }
     };
 
     // The components of the UI are put here
