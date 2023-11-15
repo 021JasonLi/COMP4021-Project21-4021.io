@@ -67,10 +67,41 @@ const SignInForm = (function() {
     return { initialize, show, hide };
 })();
 
+const GameFrontPage = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+
+    }
+
+    return { initialize };
+})();
+
+const GamePlayPage = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        // Hide it
+        $("#game-play-page").hide();
+
+    }
+
+    return { initialize };
+})();
+
+const GameOverPage = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        // Hide it
+        $("#game-over-page").hide();
+
+    }
+
+    return { initialize };
+})();
+
 const UI = (function() {
 
     // The components of the UI are put here
-    const components = [SignInForm];
+    const components = [SignInForm, GameFrontPage, GamePlayPage, GameOverPage];
 
     // This function initializes the UI
     const initialize = function() {
