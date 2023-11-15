@@ -162,6 +162,7 @@ button.icon:active {
 /* Header */
 #header {
     height: 80px;
+    width: 100%;
     background: var(--header-background);
     padding: 0 20px;
 }
@@ -186,11 +187,12 @@ button.icon:active {
 /* Main panel */
 #main-panel {
     height: calc(100% - 80px);
+    width: 100%;
     background: var(--main-panel-background);
 }
 
-/* Chat area */
-#chat-panel {
+/* How to play */
+#how-to-play {
     flex-grow: 1;
     align-items: stretch;
     height: 100%;

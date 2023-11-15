@@ -18,7 +18,28 @@
     </div>
 
     <div id="game-front-page" class="col">
-        game front page
+        <div id="header" class="row">
+            <div id="title">4021.io</div>
+            <div class="spacer-grow"></div>
+            <div id="user-panel" class="row">
+                <div class="field-content row shadow">
+                    <span class="user-name">-</span>
+                </div>
+                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+            </div>
+        </div>
+        <div id="main-panel" class="row">
+            <div id="how-to-play" class="col">
+                <div id="how-to-play" class="row">How to play</div>
+                <div id="ready-text" class="row">Ready to play?</div>
+                <button id="ready-button">I am ready!</button>
+                
+            </div>
+
+            <div id="online-users-panel" class="col">
+                <div id="online-users-area" class="col"></div>
+            </div>
+        </div>
     </div>
 
     <div id="signin-overlay" class="overlay row">
@@ -40,9 +61,6 @@
                 <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
                 <div class="spacer-0"></div>
                 <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-                <!-- <select id="register-avatar">
-                    <option value="">Select your avatar</option>
-                </select> -->
                 <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
                 <input id="register-password" type="password" placeholder="Enter your password"></input>
                 <input id="register-confirm" type="password" placeholder="Enter your password again"></input>

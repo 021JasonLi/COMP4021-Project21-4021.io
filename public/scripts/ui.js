@@ -17,7 +17,9 @@ const SignInForm = (function() {
             Authentication.signin(username, password,
                 () => {
                     hide();
-                    // Socket.connect(); // Connect to the Socket.IO server here
+                    GameFrontPage.userPanelUpdate(Authentication.getUser());
+                    GameFrontPage.userPanelShow();
+                    // Socket.connect();
                 },
                 (error) => { $("#signin-message").text(error); }
             );
@@ -70,10 +72,43 @@ const SignInForm = (function() {
 const GameFrontPage = (function() {
     // This function initializes the UI
     const initialize = function() {
+        // Hide the user panel
+        userPanelHide();
 
+        // Click event for the signout button
+        $("#signout-button").on("click", () => {
+            // Send a signout request
+            Authentication.signout(
+                () => {
+                    // Socket.disconnect(); 
+                    userPanelHide();
+                    SignInForm.show();
+                }
+            );
+        });
     }
 
-    return { initialize };
+    // This function shows the user panel
+    const userPanelShow = function(user) {
+        $("#user-panel").show();
+    };
+
+    // This function hides the user panel
+    const userPanelHide = function() {
+        $("#user-panel").hide();
+    };
+
+    // This function updates the user panel
+    const userPanelUpdate = function(user) {
+        if (user) {
+            $("#user-panel .user-name").text(user.name);
+        }
+        else {
+            $("#user-panel .user-name").text("");
+        }
+    };
+
+    return { initialize, userPanelShow, userPanelHide, userPanelUpdate };
 })();
 
 const GamePlayPage = (function() {
@@ -99,6 +134,11 @@ const GameOverPage = (function() {
 })();
 
 const UI = (function() {
+    // This function gets the user display
+    const getUserDisplay = function(user) {
+        return $("<div class='field-content row shadow'></div>")
+            .append($("<span class='user-name'>" + user.name + "</span>"));
+    };
 
     // The components of the UI are put here
     const components = [SignInForm, GameFrontPage, GamePlayPage, GameOverPage];
@@ -111,5 +151,5 @@ const UI = (function() {
         }
     };
 
-    return { initialize };
+    return { getUserDisplay, initialize };
 })();
