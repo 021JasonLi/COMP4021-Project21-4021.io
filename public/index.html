@@ -18,7 +18,55 @@
     </div>
 
     <div id="game-front-page" class="col">
-        game front page
+        <div id="header" class="row">
+            <div id="title">4021.io</div>
+            <div class="spacer-grow"></div>
+            <div id="user-panel" class="row">
+                <div class="field-content row shadow">
+                    <span class="user-name">-</span>
+                </div>
+                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+            </div>
+        </div>
+        <div id="main-panel" class="row">
+            <div id="how-to-play" class="col">
+                <div id="how-to-play" class="row">How to play</div>
+                <div id="movement-control" class="row">
+                    <div class="caption">Press</div>
+                    <div id="key-group" class="row">
+                        <div class="key">W</div>
+                        <div class="key">A</div>
+                        <div class="key">S</div>
+                        <div class="key">D</div>
+                    </div>
+                    <div class="caption">to move your character</div>
+                </div>
+                <div id="click-control" class="row">
+                    <div class="caption">Left click to shoot bullet</div>
+                </div>
+                <div id="score-control" class="row">
+                    <div class="caption">Score points by killing other players</div>
+                </div>
+                <div id="exp-control" class="row">
+                    <div class="caption">Gain EXP by shooting XP boxes</div>
+                </div>
+                <div id="level-control" class="row">
+                    <div class="caption">Level up to gain more HP and become more powerful</div>
+                </div>
+                <div id="powerup-control" class="row">
+                    <div class="caption">Shoot powerups to gain special abilities</div>
+                </div>
+                <div id="ready-group" class="row">
+                    <div id="ready-text" class="row">Ready to play?</div>
+                    <button id="ready-button">I am ready!</button>
+                </div>
+                
+            </div>
+
+            <div id="online-users-panel" class="col">
+                <div id="online-users-area" class="col"></div>
+            </div>
+        </div>
     </div>
 
     <div id="signin-overlay" class="overlay row">
@@ -40,9 +88,6 @@
                 <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
                 <div class="spacer-0"></div>
                 <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-                <!-- <select id="register-avatar">
-                    <option value="">Select your avatar</option>
-                </select> -->
                 <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
                 <input id="register-password" type="password" placeholder="Enter your password"></input>
                 <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
@@ -53,10 +98,18 @@
         </div>
     </div>
 
+    <div id="countdown-overlay" class="overlay row">
+        <div id="countdown">3</div>
+    </div>
+
     <script src="/socket.io/socket.io.min.js"></script>
+    <script src="scripts/gameFrontPageUI.js"></script>
+    <script src="scripts/gamePlayPageUI.js"></script>
+    <script src="scripts/gameOverPageUI.js"></script>
     <script src="scripts/ui.js"></script>
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
+    <script src="scripts/socket.js"></script>
     <script>
         $(document).ready(function () {
             console.log("Page Loaded");
@@ -68,21 +121,13 @@
             Authentication.validate(
                 () => {
                     SignInForm.hide();
-                    // Socket.connect();
+                    UserPanel.update(Authentication.getUser());
+                    UserPanel.show();
+                    Socket.connect();
                 },
                 () => { SignInForm.show(); }
             );
 
-            // Below: Debug use only
-            // setTimeout(() => { 
-            //     $("#game-front-page").hide();
-            //     $("#game-play-page").show();
-            //     setTimeout(() => {
-            //         $("#game-play-page").hide();
-            //         $("#game-over-page").show();
-            //     }, 2000);
-            // }, 2000);
-            // Above: Debug use only
         });
     </script>
 </body>
