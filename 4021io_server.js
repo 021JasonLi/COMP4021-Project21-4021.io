@@ -106,7 +106,8 @@ app.post("/signin", (req, res) => {
     // Sending a success response with the user account
     const output = { 
         username,
-        name: users[username].name
+        name: users[username].name,
+        ready: false
     };
     req.session.user = output;
     res.json({
@@ -162,7 +163,8 @@ io.on("connection", (socket) => {
     if (socket.request.session.user) {
         // Add a new user to the online user list
         onlineUsers[socket.request.session.user.username] = {
-            name: socket.request.session.user.name
+            name: socket.request.session.user.name,
+            ready: false
         };
         // Broadcast to all clients to add user
         io.emit("add user", JSON.stringify(socket.request.session.user));
@@ -180,6 +182,33 @@ io.on("connection", (socket) => {
     socket.on("get users", () => {
         // Send the online users to the browser
         socket.emit("users", JSON.stringify(onlineUsers));
+    });
+
+    socket.on("ready", () => {
+        // Update the ready status of the user
+        onlineUsers[socket.request.session.user.username].ready = true;
+        socket.request.session.user.ready = true;
+        // Broadcast to all clients to update user
+        io.emit("update user", JSON.stringify(socket.request.session.user));
+        // Check if everyone is ready
+        let everyoneReady = true;
+        if (onlineUsers.length < 2) {
+            everyoneReady = false;
+        }
+        else {
+            for (const username in onlineUsers) {
+                if (!onlineUsers[username].ready) {
+                    everyoneReady = false;
+                    break;
+                }
+            }
+        }  
+        // If everyone is ready, start the game
+        if (everyoneReady) {
+            // Broadcast to all clients to start the game
+            io.emit("start game");
+        }
+
     });
     
 });

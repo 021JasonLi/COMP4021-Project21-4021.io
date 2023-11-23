@@ -38,6 +38,21 @@ const Socket = (function() {
             OnlineUsersPanel.removeUser(user);
         });
 
+        // Set up the update user event
+        socket.on("update user", (user) => {
+            user = JSON.parse(user);
+            // Update the online user
+            OnlineUsersPanel.updateUser(user);
+        });
+
+        // Set up the start game event
+        socket.on("start game", () => {
+            // Hide the game front page
+            // GameFrontPageUI.hide();
+            // Show the game play page
+            // GamePlayPage.show();
+        });
+
     };
 
     // This function disconnects the socket from the server
@@ -46,6 +61,10 @@ const Socket = (function() {
         socket = null;
     };
 
+    // This function sends a ready request
+    const ready = function() {
+        socket.emit("ready");
+    };
 
-    return { getSocket, connect, disconnect };
+    return { getSocket, connect, disconnect, ready };
 })();

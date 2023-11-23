@@ -82,6 +82,7 @@ const UserPanel = (function() {
                     Socket.disconnect();
                     hide();
                     SignInForm.show();
+                    $("#ready-button").prop("disabled", false);
                 }
             );
         });
@@ -154,12 +155,39 @@ const OnlineUsersPanel = (function() {
 		if (userDiv.length > 0) userDiv.remove();
 	};
 
-    return { initialize, update, addUser, removeUser };
+    // This functions updates a user from not ready to ready
+    const updateUser = function(user) {
+        const onlineUsersArea = $("#online-users-area");
+        // Find the user
+        const userDiv = onlineUsersArea.find("#username-" + user.username);
+        // Remove the user
+        if (userDiv.length > 0) {
+            userDiv.empty();
+            userDiv.append(UI.getUserDisplay(user));
+        }
+    }
+
+    return { initialize, update, addUser, removeUser, updateUser };
+})();
+
+const HowToPlayPanel = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+         // Click event for the ready button
+         $("#ready-button").on("click", () => {
+            // Send a ready request
+            Socket.ready();
+            // Disable the ready button
+            $("#ready-button").prop("disabled", true);
+        });
+    };
+
+    return { initialize };
 })();
 
 const GameFrontPageUI = (function() {
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, OnlineUsersPanel];
+    const components = [SignInForm, UserPanel, OnlineUsersPanel, HowToPlayPanel];
 
     // This function initializes the UI
     const initialize = function() {

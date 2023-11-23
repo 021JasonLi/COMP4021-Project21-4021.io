@@ -1,25 +1,3 @@
-const GamePlayPage = (function() {
-    // This function initializes the UI
-    const initialize = function() {
-        // Hide it
-        $("#game-play-page").hide();
-
-    }
-
-    return { initialize };
-})();
-
-const GameOverPage = (function() {
-    // This function initializes the UI
-    const initialize = function() {
-        // Hide it
-        $("#game-over-page").hide();
-
-    }
-
-    return { initialize };
-})();
-
 const UI = (function() {
     // This function gets the user display
     const getUserDisplay = function(user) {
@@ -33,16 +11,12 @@ const UI = (function() {
         }
     };
 
-    // The components of the UI are put here
-    const components = [GamePlayPage, GameOverPage];
-    
     // This function initializes the UI
     const initialize = function() {
-        // Initialize the components
+        // Initialize each page
         GameFrontPageUI.initialize();
-        for (const component of components) {
-            component.initialize();
-        }
+        GamePlayPageUI.initialize();
+        GameOverPageUI.initialize();
     };
 
     return { getUserDisplay, initialize };
