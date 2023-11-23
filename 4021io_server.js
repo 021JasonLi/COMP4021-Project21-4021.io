@@ -162,11 +162,10 @@ io.on("connection", (socket) => {
     if (socket.request.session.user) {
         // Add a new user to the online user list
         onlineUsers[socket.request.session.user.username] = {
-            name: socket.request.session.user.name,
-            ready: false
+            name: socket.request.session.user.name
         };
         // Broadcast to all clients to add user
-        io.emit("users", JSON.stringify(onlineUsers));
+        io.emit("add user", JSON.stringify(socket.request.session.user));
     }
 
     socket.on("disconnect", () => {
@@ -174,22 +173,13 @@ io.on("connection", (socket) => {
             // Remove the user from the online user list
             delete onlineUsers[socket.request.session.user.username];
             // Broadcast to all clients to remove user
-            io.emit("users", JSON.stringify(onlineUsers));
+            io.emit("remove user", JSON.stringify(socket.request.session.user));
         }
     });
 
     socket.on("get users", () => {
         // Send the online users to the browser
         socket.emit("users", JSON.stringify(onlineUsers));
-    });
-
-    socket.on("ready", () => {
-        if (socket.request.session.user) {
-            // Update the ready status of the user
-            onlineUsers[socket.request.session.user.username].ready = true;
-            // Broadcast to all clients to update user ready status
-            io.emit("users", JSON.stringify(onlineUsers));
-        }
     });
     
 });

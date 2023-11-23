@@ -55,7 +55,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 20px;
+    padding: 10px;
 }
 .col { flex-direction: column; }
 .spacer-0 { width: 0; height: 0; }
@@ -189,6 +189,7 @@ button.icon:active {
     height: calc(100% - 80px);
     width: 100%;
     background: var(--main-panel-background);
+    align-items: start;
 }
 
 /* How to play */

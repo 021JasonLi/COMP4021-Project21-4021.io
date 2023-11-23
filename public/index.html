@@ -31,8 +31,35 @@
         <div id="main-panel" class="row">
             <div id="how-to-play" class="col">
                 <div id="how-to-play" class="row">How to play</div>
-                <div id="ready-text" class="row">Ready to play?</div>
-                <button id="ready-button">I am ready!</button>
+                <div id="movement-control" class="row">
+                    <div class="caption">Press</div>
+                    <div id="key-group" class="row">
+                        <div class="key">W</div>
+                        <div class="key">A</div>
+                        <div class="key">S</div>
+                        <div class="key">D</div>
+                    </div>
+                    <div class="caption">to move your character</div>
+                </div>
+                <div id="click-control" class="row">
+                    <div class="caption">Left click to shoot bullet</div>
+                </div>
+                <div id="score-control" class="row">
+                    <div class="caption">Score points by killing other players</div>
+                </div>
+                <div id="exp-control" class="row">
+                    <div class="caption">Gain EXP by shooting XP boxes</div>
+                </div>
+                <div id="level-control" class="row">
+                    <div class="caption">Level up to gain more HP and become more powerful</div>
+                </div>
+                <div id="powerup-control" class="row">
+                    <div class="caption">Shoot powerups to gain special abilities</div>
+                </div>
+                <div id="ready-group" class="row">
+                    <div id="ready-text" class="row">Ready to play?</div>
+                    <button id="ready-button">I am ready!</button>
+                </div>
                 
             </div>
 
@@ -72,6 +99,7 @@
     </div>
 
     <script src="/socket.io/socket.io.min.js"></script>
+    <script src="scripts/gameFrontPageUI.js"></script>
     <script src="scripts/ui.js"></script>
     <script src="scripts/registration.js"></script>
     <script src="scripts/authentication.js"></script>
@@ -87,21 +115,13 @@
             Authentication.validate(
                 () => {
                     SignInForm.hide();
+                    UserPanel.update(Authentication.getUser());
+                    UserPanel.show();
                     Socket.connect();
                 },
                 () => { SignInForm.show(); }
             );
 
-            // Below: Debug use only
-            // setTimeout(() => { 
-            //     $("#game-front-page").hide();
-            //     $("#game-play-page").show();
-            //     setTimeout(() => {
-            //         $("#game-play-page").hide();
-            //         $("#game-over-page").show();
-            //     }, 2000);
-            // }, 2000);
-            // Above: Debug use only
         });
     </script>
 </body>

@@ -21,7 +21,21 @@ const Socket = (function() {
         socket.on("users", (onlineUsers) => {
             onlineUsers = JSON.parse(onlineUsers);
             // Show the online users
-            GameFrontPage.onlineUserPanelUpdate(onlineUsers);
+            OnlineUsersPanel.update(onlineUsers);
+        });
+
+        // Set up the add user event
+        socket.on("add user", (user) => {
+            user = JSON.parse(user);
+            // Add the online user
+            OnlineUsersPanel.addUser(user);
+        });
+
+        // Set up the remove user event
+        socket.on("remove user", (user) => {
+            user = JSON.parse(user);
+            // Remove the online user
+            OnlineUsersPanel.removeUser(user);
         });
 
     };
@@ -32,10 +46,6 @@ const Socket = (function() {
         socket = null;
     };
 
-    // This function sends a ready event to the server
-    const ready = function() {
-        socket.emit("ready");
-    }
 
-    return { getSocket, connect, disconnect, ready };
+    return { getSocket, connect, disconnect };
 })();
