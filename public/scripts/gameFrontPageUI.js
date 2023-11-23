@@ -185,9 +185,44 @@ const HowToPlayPanel = (function() {
     return { initialize };
 })();
 
+const CountDownOverlay = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        // Hide it
+        $("#countdown-overlay").hide();
+    };
+
+    // This function shows the overlay and starts the countdown
+    const show = function() {
+        let timeRemaining = parseInt($("#countdown").text());
+
+        function countdown() {
+            // Decrease the remaining time
+            timeRemaining -= 1;
+
+            // Continue the countdown if there is still time;
+            // otherwise, start the game when the time is up
+            if (timeRemaining > 0) {
+                $("#countdown").text(timeRemaining);
+                setTimeout(countdown, 1000);
+            } else {
+                $("#countdown").text("Start!");
+                GameFrontPageUI.startGame();
+            }
+        }
+
+        // Show the countdown overlay
+        $("#countdown-overlay").show();
+        // Start the countdown
+        setTimeout(countdown, 1000);
+    };
+
+    return { initialize, show };
+})();
+
 const GameFrontPageUI = (function() {
     // The components of the UI are put here
-    const components = [SignInForm, UserPanel, OnlineUsersPanel, HowToPlayPanel];
+    const components = [SignInForm, UserPanel, OnlineUsersPanel, HowToPlayPanel, CountDownOverlay];
 
     // This function initializes the UI
     const initialize = function() {
@@ -197,5 +232,15 @@ const GameFrontPageUI = (function() {
         }
     };
 
-    return { initialize };
+    // This functions starts the game
+    const startGame = function() {
+        // Fade out the countdown overlay
+        $("#countdown-overlay").fadeOut(300);
+        // Hide the game front page
+        $("#game-front-page").hide();
+        // Show the game play page
+        $("#game-play-page").show();
+    };
+
+    return { initialize, startGame };
 })();

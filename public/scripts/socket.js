@@ -47,10 +47,7 @@ const Socket = (function() {
 
         // Set up the start game event
         socket.on("start game", () => {
-            // Hide the game front page
-            // GameFrontPageUI.hide();
-            // Show the game play page
-            // GamePlayPage.show();
+            CountDownOverlay.show();
         });
 
     };
