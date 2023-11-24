@@ -10,5 +10,13 @@
   "jason": {
     "name": "Jason Li",
     "password": "$2b$10$kU31lSNdjtbJYDJ27V.0Q.Mjp0SYJ4d1PPeKK6aM5126SsXrU5Rwy"
+  },
+  "ben": {
+    "name": "Ben Chak",
+    "password": "$2b$10$v7RmJlLxuB57F4vxyRHGA.nnnVDF9.1IBoPfW3sJ2YzWPRG9Vh/zK"
+  },
+  "peter": {
+    "name": "Peter Chan",
+    "password": "$2b$10$TdnIP1GDNnjNHFghtLbJn.th6vWLp/IWDNcvX.SzB40Y5cgUfxEHu"
   }
 }
