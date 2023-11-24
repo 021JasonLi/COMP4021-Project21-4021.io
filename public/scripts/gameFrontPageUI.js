@@ -195,6 +195,7 @@ const CountDownOverlay = (function() {
     // This function shows the overlay and starts the countdown
     const show = function() {
         let timeRemaining = parseInt($("#countdown").text());
+        const countdownSound = new Audio("../sound/countdown.mp3");
 
         function countdown() {
             // Decrease the remaining time
@@ -205,6 +206,8 @@ const CountDownOverlay = (function() {
             if (timeRemaining > 0) {
                 $("#countdown").text(timeRemaining);
                 setTimeout(countdown, 1000);
+                countdownSound.currentTime = 0;
+                countdownSound.play();
             } else {
                 $("#countdown").text("Start!");
                 GameFrontPageUI.startGame();
@@ -215,6 +218,7 @@ const CountDownOverlay = (function() {
         $("#countdown-overlay").show();
         // Start the countdown
         setTimeout(countdown, 1000);
+        countdownSound.play();
     };
 
     return { initialize, show };

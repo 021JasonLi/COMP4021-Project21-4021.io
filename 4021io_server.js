@@ -7,6 +7,8 @@ const session = require("express-session");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
+const onlineUsers = {};
+
 // Create the Express app
 const app = express();
 
@@ -79,6 +81,15 @@ app.post("/register", (req, res) => {
 
 // Handle the /signin endpoint
 app.post("/signin", (req, res) => {
+    // Only allow sign in if no more than 4 users are online
+    if (Object.keys(onlineUsers).length >= 4) {
+        res.json({
+            status: "error",
+            error: "Too many users online."
+        });
+        return;
+    }
+
     // Get the JSON data from the body
     const { username, password } = req.body;
 
@@ -119,6 +130,15 @@ app.post("/signin", (req, res) => {
 
 // Handle the /validate endpoint
 app.get("/validate", (req, res) => {
+    // Only allow sign in if no more than 4 users are online
+    if (Object.keys(onlineUsers).length >= 4) {
+        res.json({
+            status: "error",
+            error: "Too many users online."
+        });
+        return;
+    }
+
     // Getting req.session.user
     const user = req.session.user;
     if (!user) {
@@ -152,8 +172,6 @@ app.get("/signout", (req, res) => {
 // Create the socket server
 const httpServer = createServer(app);
 const io = new Server(httpServer); 
-
-const onlineUsers = {};
 
 io.use((socket, next) => {
     chatSession(socket.request, {}, next);
@@ -190,9 +208,10 @@ io.on("connection", (socket) => {
         socket.request.session.user.ready = true;
         // Broadcast to all clients to update user
         io.emit("update user", JSON.stringify(socket.request.session.user));
+
         // Check if everyone is ready
         let everyoneReady = true;
-        if (onlineUsers.length < 2) {
+        if (Object.keys(onlineUsers).length < 2) {
             everyoneReady = false;
         }
         else {
