@@ -13,8 +13,9 @@
         game over page
     </div>
 
-    <div id="game-play-page" class="col">
-        game play page
+    <div id="game-play-page" class="gameplay">
+        <canvas width="854px" height="480px"></canvas>
+        <div id="status-bar">Status bar</div>
     </div>
 
     <div id="game-front-page" class="col">
@@ -73,16 +74,11 @@
                 () => { SignInForm.show(); }
             );
 
-            // Below: Debug use only
-            // setTimeout(() => { 
-            //     $("#game-front-page").hide();
-            //     $("#game-play-page").show();
-            //     setTimeout(() => {
-            //         $("#game-play-page").hide();
-            //         $("#game-over-page").show();
-            //     }, 2000);
-            // }, 2000);
-            // Above: Debug use only
+            // Canvas visual test
+            const cv = $("canvas").get(0);
+            const context = cv.getContext("2d");
+            context.fillRect(0, 0, 854, 480);
+
         });
     </script>
 </body>
