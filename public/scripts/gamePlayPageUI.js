@@ -13,29 +13,87 @@ const Game = (function() {
         const x = cv.width / 2
         const y = cv.height / 2
 
+        class Projectile {
+          constructor({ x, y, radius, color = 'white', velocity }) {
+            this.x = x
+            this.y = y
+            this.radius = radius
+            this.color = color
+            this.velocity = velocity
+          }
+        
+          draw() {
+            context.save()
+            context.shadowColor = this.color
+            context.shadowBlur = 20
+            context.beginPath()
+            context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+            context.fillStyle = this.color
+            context.fill()
+            context.restore()
+          }
+        
+          update() {
+            this.draw()
+            this.x = this.x + this.velocity.x
+            this.y = this.y + this.velocity.y
+          }
+        }
+
         const totalGameTime = 1000;   // Total game time in seconds
         const gemMaxAge = 3000;     // The maximum age of the gems in milliseconds
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
 
         const frontEndPlayers = {}
-        // const frontEndProjectiles = {}
+        const frontEndProjectiles = {}
 
         /* Create the game area */
         const gameArea = BoundingBox(context, 0, 0, cv.height, cv.width);
 
         /* Create the sprites in the game */
-
+        // const Attack = attack(context, 100, 100, gameArea);
         // const player = Player(context, 427, 240, gameArea); // The player
         // const gem = Gem(context, 427, 350, "green");        // The gem
+        const Life = life(context, 427, 350);
         // const Fire = [
         //     fire(context, gameArea.getLeft(), gameArea.getTop()),
         //     fire(context, gameArea.getRight(), gameArea.getTop()),
         //     fire(context, gameArea.getLeft(), gameArea.getBottom()),
         //     fire(context, gameArea.getRight(), gameArea.getBottom()),
         // ];
-
         // gem.randomize(gameArea);
+        Life.randomize(gameArea);
+
+        socket.on('connect', () => {
+          socket.emit('initCanvas', {width: cv.width, height: cv.height})
+        })
+
+        socket.on('updateProjectiles', (backEndProjectiles) => {
+          for (const id in backEndProjectiles) {
+            const backEndProjectile = backEndProjectiles[id]
+        
+            if (!frontEndProjectiles[id]) {
+              frontEndProjectiles[id] = new Projectile({
+                x: backEndProjectile.x,
+                y: backEndProjectile.y,
+                radius: 5,
+                color: 'white',
+                velocity: backEndProjectile.velocity
+              })
+            } 
+            else {
+              frontEndProjectiles[id].x += backEndProjectiles[id].velocity.x
+              frontEndProjectiles[id].y += backEndProjectiles[id].velocity.y
+            }
+          }
+        
+          for (const frontEndProjectileId in frontEndProjectiles) {
+            if (!backEndProjectiles[frontEndProjectileId]) {
+              delete frontEndProjectiles[frontEndProjectileId]
+            }
+          }
+        })
 
         socket.on('updatePlayers', (backEndPlayers) => {
             for (const id in backEndPlayers) {
@@ -43,7 +101,6 @@ const Game = (function() {
           
               if (!frontEndPlayers[id]) {
                 frontEndPlayers[id] = Player(context, backEndPlayer.x, backEndPlayer.y, gameArea);
-          
               }
               else{
                 //if a player already exists
@@ -147,15 +204,19 @@ const Game = (function() {
 
 
           /* Update the sprites */
+          Life.update(now);
           // gem.update(now);
           // player.update(now);
           // Fire[0].update(now);
           // Fire[1].update(now);
           // Fire[2].update(now);
           // Fire[3].update(now);
+          // Attack.update(now);
+
           for (const id in frontEndPlayers) {
             const frontEndPlayer = frontEndPlayers[id]
             frontEndPlayer.update(now);
+            // console.log("x:",frontEndPlayer.get_player_x(), " y:", frontEndPlayer.get_player_x())
           }
 
 
@@ -179,16 +240,29 @@ const Game = (function() {
           context.clearRect(0, 0, cv.width, cv.height);
 
           /* Draw the sprites */
+          Life.draw();
           // gem.draw();
           // player.draw();
           // Fire[0].draw();
           // Fire[1].draw();
           // Fire[2].draw();
           // Fire[3].draw();
+          // Attack.draw();
           for (const id in frontEndPlayers) {
-            const frontEndPlayer = frontEndPlayers[id]
-            frontEndPlayer.draw()
+            const frontEndPlayer = frontEndPlayers[id];
+            frontEndPlayer.draw();
           }
+          for (const id in frontEndProjectiles) {
+            const frontEndProjectile = frontEndProjectiles[id];
+            frontEndProjectile.draw();
+          }
+          
+          // Attack.draw();
+
+          // for (let i = frontEndProjectiles.length - 1; i >= 0; i--) {
+          //   const frontEndProjectile = frontEndProjectiles[i]
+          //   frontEndProjectile.update()
+          // }
 
 
 
@@ -273,6 +347,24 @@ const Game = (function() {
             frontEndPlayers[socket.id].move(3);
             socket.emit('keydown', 'KeyD');
             break
+          
+          case 'KeyI':
+            console.log("KeyI");
+            const Attack = attack(context, 100, 100, gameArea);
+            console.log(Attack);
+            break;
+          
+          case 'KeyJ':
+            console.log("KeyJ");
+            break;
+
+          case 'KeyK':
+            console.log("KeyK");
+            break;
+
+          case 'KeyL':
+            console.log("KeyL");
+            break;
         }
       })
 
@@ -300,6 +392,41 @@ const Game = (function() {
             socket.emit('keyup', 'KeyD');
             break
         }
+      })
+
+      addEventListener('click', (event) => {   
+        const playerPosition = {
+          x: frontEndPlayers[socket.id].get_player_x(),
+          y: frontEndPlayers[socket.id].get_player_y()
+        } 
+
+
+        const angle = Math.atan2(
+          event.clientY - playerPosition.y,
+          event.clientX - playerPosition.x
+        )
+      
+        const velocity = {
+          x: Math.cos(angle) * 5,
+          y: Math.sin(angle) * 5
+        }
+        
+        socket.emit('shoot', {
+          x: playerPosition.x,
+          y: playerPosition.y,
+          angle
+        })
+        // frontEndProjectiles.push(
+        //   new Projectile({
+        //     x: playerPosition.x,
+        //     y: playerPosition.y,
+        //     radius: 5,
+        //     color: 'white',
+        //     velocity
+        //   })
+        // )
+      
+        console.log(frontEndProjectiles)
       })
 
       /* Handle the start of the game */
