@@ -171,13 +171,25 @@ app.get("/signout", (req, res) => {
 
 // Create the socket server
 const httpServer = createServer(app);
-const io = new Server(httpServer); 
+const io = new Server(httpServer, { pingInterval: 2000, pingTimeout: 5000 }); 
 
 io.use((socket, next) => {
     chatSession(socket.request, {}, next);
 });
 
+const backEndPlayers = {}
+
 io.on("connection", (socket) => {
+
+    console.log('a user connected')
+  
+    io.emit('updatePlayers', backEndPlayers)
+
+    backEndPlayers[socket.id] = {
+        x:500 * Math.random(),
+        y:500 * Math.random()
+    }
+
     if (socket.request.session.user) {
         // Add a new user to the online user list
         onlineUsers[socket.request.session.user.username] = {
@@ -188,13 +200,17 @@ io.on("connection", (socket) => {
         io.emit("add user", JSON.stringify(socket.request.session.user));
     }
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", (reason) => {
         if (socket.request.session.user) {
             // Remove the user from the online user list
             delete onlineUsers[socket.request.session.user.username];
             // Broadcast to all clients to remove user
             io.emit("remove user", JSON.stringify(socket.request.session.user));
         }
+
+        console.log(reason)
+        delete backEndPlayers[socket.id]
+        io.emit('updatePlayers', backEndPlayers)
     });
 
     socket.on("get users", () => {
@@ -232,6 +248,27 @@ io.on("connection", (socket) => {
     
 });
 
+
+//game play
+
+// const backEndPlayers = {}
+
+// io.on('connection', (socket) => {
+//     console.log('a user connected')
+  
+//     io.emit('updatePlayers', backEndPlayers)
+
+//     backEndPlayers[socket.id] = {
+//         x:500 * Math.random(),
+//         y:500 * Math.random()
+//     }
+
+//     socket.on('disconnect', (reason) => {
+//         console.log(reason)
+//         delete backEndPlayers[socket.id]
+//         io.emit('updatePlayers', backEndPlayers)
+//     })
+// })
 
 
 // Use a web server to listen at port 8000
