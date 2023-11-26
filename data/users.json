@@ -34,5 +34,9 @@
   "b": {
     "name": "b",
     "password": "$2b$10$MWumyU4/SCI2n6wj4y/iq.pKeKoDcVflUPhISWiEwXCGb8W8YHp9G"
+  },
+  "c": {
+    "name": "c",
+    "password": "$2b$10$grXuaC8B9jBEpX56NdgvoueJLASAIQHD.kxl8LWOLNlbykVOvDjey"
   }
 }

@@ -18,7 +18,8 @@ const Game = (function() {
         let gameStartTime = 0;      // The timestamp when the game starts
         let collectedGems = 0;      // The number of gems collected in the game
 
-         const frontEndPlayers = {}
+        const frontEndPlayers = {}
+        // const frontEndProjectiles = {}
 
         /* Create the game area */
         const gameArea = BoundingBox(context, 0, 0, cv.height, cv.width);
@@ -44,30 +45,85 @@ const Game = (function() {
                 frontEndPlayers[id] = Player(context, backEndPlayer.x, backEndPlayer.y, gameArea);
           
               }
-            }
+              else{
+                //if a player already exists
+                switch (backEndPlayer.code) {
+                  case 2:
+                    frontEndPlayers[id].move(2);
+                    break;
+              
+                  case 1:
+                    frontEndPlayers[id].move(1);
+                    break
+              
+                  case 4:
+                    frontEndPlayers[id].move(4);
+                    break
+              
+                  case 3:
+                    frontEndPlayers[id].move(3);
+                    break
 
+                  case 6:
+                    frontEndPlayers[id].stop(2);
+                    break;
+              
+                  case 5:
+                    frontEndPlayers[id].stop(1);
+                    break
+              
+                  case 8:
+                    frontEndPlayers[id].stop(4);
+                    break
+              
+                  case 7:
+                    frontEndPlayers[id].stop(3);
+                    break
+                }
+
+                // if (backEndPlayer.code == 2){
+                //   frontEndPlayers[id].move(2);
+                // }
+
+                // if (backEndPlayer.code == 1){
+                //   frontEndPlayers[id].move(1);
+                // }
+
+                // if (backEndPlayer.code == 4){
+                //   frontEndPlayers[id].move(4);
+                // }
+
+                // if (backEndPlayer.code == 3){
+                //   frontEndPlayers[id].move(3);
+                // }
+
+                // if (backEndPlayer.code == 6){
+                //   frontEndPlayers[id].stop(2);
+                // }
+
+                // if (backEndPlayer.code == 5){
+                //   frontEndPlayers[id].stop(1);
+                // }
+
+                // if (backEndPlayer.code == 8){
+                //   frontEndPlayers[id].stop(4);
+                // }
+
+                // if (backEndPlayer.code == 7){
+                //   frontEndPlayers[id].stop(3);
+                // }
+
+              }
+            }
             for (const id in frontEndPlayers){
               if (!backEndPlayers[id]){
                 delete frontEndPlayers[id];
               }
             }
-
-            console.log(frontEndPlayers);
+            // console.log(frontEndPlayers);
         })
         
-        // let animationId
-        // function animate() {
-        //   animationId = requestAnimationFrame(animate)
-        //   // c.fillStyle = 'rgba(0, 0, 0, 0.1)'
-        //   context.clearRect(0, 0, cv.width, cv.height)
-      
-        //   for (const id in frontEndPlayers) {
-        //       const frontEndPlayer = frontEndPlayers[id]
-      
-        //       frontEndPlayer.draw()
-        //   }
-        // }
-        // animate()
+
 
         function doFrame(now) {
           if (gameStartTime == 0) gameStartTime = now;
@@ -140,10 +196,118 @@ const Game = (function() {
           requestAnimationFrame(doFrame);
       }
 
+      /* faster response? = false */
+      // const keys = {
+      //   w: {
+      //     pressed: false
+      //   },
+      //   a: {
+      //     pressed: false
+      //   },
+      //   s: {
+      //     pressed: false
+      //   },
+      //   d: {
+      //     pressed: false
+      //   }
+      // }
+
+      // setInterval(() => {
+      //   if (keys.w.pressed) {
+      //     frontEndPlayers[socket.id].move(2);
+      //     socket.emit('keydown', 'KeyW');
+      //   }
+      //   else{
+      //     frontEndPlayers[socket.id].stop(2);
+      //     socket.emit('keyup', 'KeyW');
+      //   }
+      
+      //   if (keys.a.pressed) {
+      //     frontEndPlayers[socket.id].move(1);
+      //     socket.emit('keydown', 'KeyA');
+      //   }
+      //   else{
+      //     frontEndPlayers[socket.id].stop(1);
+      //     socket.emit('keyup', 'KeyA');
+      //   }
+      
+      //   if (keys.s.pressed) {
+      //     frontEndPlayers[socket.id].move(4);
+      //     socket.emit('keydown', 'KeyS');
+      //   }
+      //   else{
+      //     frontEndPlayers[socket.id].stop(4);
+      //     socket.emit('keyup', 'KeyS');
+      //   }
+      
+      //   if (keys.d.pressed) {
+      //     frontEndPlayers[socket.id].move(3);
+      //     socket.emit('keydown', 'KeyD');
+      //   }
+      //   else{
+      //     frontEndPlayers[socket.id].stop(3);
+      //     socket.emit('keyup', 'KeyD');
+      //   }
+      // })
+
+      window.addEventListener('keydown', (event) => {
+        if (!frontEndPlayers[socket.id]) return
+      
+        switch (event.code) {
+          case 'KeyW':
+            frontEndPlayers[socket.id].move(2);
+            socket.emit('keydown', 'KeyW');
+            break;
+      
+          case 'KeyA':
+            frontEndPlayers[socket.id].move(1);
+            socket.emit('keydown', 'KeyA');
+            break
+      
+          case 'KeyS':
+            frontEndPlayers[socket.id].move(4);
+            socket.emit('keydown', 'KeyS');
+            break
+      
+          case 'KeyD':
+            frontEndPlayers[socket.id].move(3);
+            socket.emit('keydown', 'KeyD');
+            break
+        }
+      })
+
+      window.addEventListener('keyup', (event) => {
+        if (!frontEndPlayers[socket.id]) return
+      
+        switch (event.code) {
+          case 'KeyW':
+            frontEndPlayers[socket.id].stop(2);
+            socket.emit('keyup', 'KeyW');
+            break
+      
+          case 'KeyA':
+            frontEndPlayers[socket.id].stop(1);
+            socket.emit('keyup', 'KeyA');
+            break
+      
+          case 'KeyS':
+            frontEndPlayers[socket.id].stop(4);
+            socket.emit('keyup', 'KeyS');
+            break
+      
+          case 'KeyD':
+            frontEndPlayers[socket.id].stop(3);
+            socket.emit('keyup', 'KeyD');
+            break
+        }
+      })
+
       /* Handle the start of the game */
 
       requestAnimationFrame(doFrame);
 
+
+      // Movement
 
     };
     return { initialize};

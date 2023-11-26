@@ -177,18 +177,18 @@ io.use((socket, next) => {
     chatSession(socket.request, {}, next);
 });
 
-const backEndPlayers = {}
+// const backEndPlayers = {}
 
 io.on("connection", (socket) => {
 
-    console.log('a user connected')
-  
-    io.emit('updatePlayers', backEndPlayers)
+    // console.log('a user connected')
 
-    backEndPlayers[socket.id] = {
-        x:500 * Math.random(),
-        y:500 * Math.random()
-    }
+    // io.emit('updatePlayers', backEndPlayers)
+
+    // backEndPlayers[socket.id] = {
+    //     x:500 * Math.random(),
+    //     y:500 * Math.random()
+    // }
 
     if (socket.request.session.user) {
         // Add a new user to the online user list
@@ -208,9 +208,9 @@ io.on("connection", (socket) => {
             io.emit("remove user", JSON.stringify(socket.request.session.user));
         }
 
-        console.log(reason)
-        delete backEndPlayers[socket.id]
-        io.emit('updatePlayers', backEndPlayers)
+        // console.log(reason)
+        // delete backEndPlayers[socket.id]
+        // io.emit('updatePlayers', backEndPlayers)
     });
 
     socket.on("get users", () => {
@@ -251,24 +251,81 @@ io.on("connection", (socket) => {
 
 //game play
 
-// const backEndPlayers = {}
+const backEndPlayers = {}
 
-// io.on('connection', (socket) => {
-//     console.log('a user connected')
-  
-//     io.emit('updatePlayers', backEndPlayers)
+io.on('connection', (socket) => {
 
-//     backEndPlayers[socket.id] = {
-//         x:500 * Math.random(),
-//         y:500 * Math.random()
-//     }
+    console.log('a user connected')
 
-//     socket.on('disconnect', (reason) => {
-//         console.log(reason)
-//         delete backEndPlayers[socket.id]
-//         io.emit('updatePlayers', backEndPlayers)
-//     })
-// })
+    io.emit('updatePlayers', backEndPlayers)
+
+    backEndPlayers[socket.id] = {
+        x:500 * Math.random(),
+        y:500 * Math.random(),
+        code: 0
+    }  
+
+    socket.on('disconnect', (reason) => {
+        console.log(reason)
+        delete backEndPlayers[socket.id]
+        io.emit('updatePlayers', backEndPlayers)
+    })
+
+    socket.on('keydown', (keycode) => {
+        switch (keycode) {
+            case 'KeyW':
+              // keys.w.pressed = true
+              backEndPlayers[socket.id].code = 2;
+              break;
+        
+            case 'KeyA':
+              // keys.a.pressed = true
+              backEndPlayers[socket.id].code = 1;
+              break
+        
+            case 'KeyS':
+              // keys.s.pressed = true
+              backEndPlayers[socket.id].code = 4;
+              break
+        
+            case 'KeyD':
+              // keys.d.pressed = true
+              backEndPlayers[socket.id].code = 3;
+              break
+        }
+    })
+
+    socket.on('keyup', (keycode) => {
+        switch (keycode) {
+            case 'KeyW':
+              // keys.w.pressed = true
+              backEndPlayers[socket.id].code = 6;
+              break;
+        
+            case 'KeyA':
+              // keys.a.pressed = true
+              backEndPlayers[socket.id].code = 5;
+              break
+        
+            case 'KeyS':
+              // keys.s.pressed = true
+              backEndPlayers[socket.id].code = 8;
+              break
+        
+            case 'KeyD':
+              // keys.d.pressed = true
+              backEndPlayers[socket.id].code = 7;
+              break
+        }
+    })
+    
+
+    // console.log(backEndPlayers);
+})
+
+setInterval(() => {
+    io.emit('updatePlayers', backEndPlayers)    
+})
 
 
 // Use a web server to listen at port 8000
