@@ -180,13 +180,25 @@ app.get("/signout", (req, res) => {
 
 // Create the socket server
 const httpServer = createServer(app);
-const io = new Server(httpServer); 
+const io = new Server(httpServer, { pingInterval: 2000, pingTimeout: 5000 }); 
 
 io.use((socket, next) => {
     chatSession(socket.request, {}, next);
 });
 
+// const backEndPlayers = {}
+
 io.on("connection", (socket) => {
+
+    // console.log('a user connected')
+
+    // io.emit('updatePlayers', backEndPlayers)
+
+    // backEndPlayers[socket.id] = {
+    //     x:500 * Math.random(),
+    //     y:500 * Math.random()
+    // }
+
     if (socket.request.session.user) {
         // Add a new user to the online user list
         onlineUsers[socket.request.session.user.username] = {
@@ -197,13 +209,17 @@ io.on("connection", (socket) => {
         io.emit("add user", JSON.stringify(socket.request.session.user));
     }
 
-    socket.on("disconnect", () => {
+    socket.on("disconnect", (reason) => {
         if (socket.request.session.user) {
             // Remove the user from the online user list
             delete onlineUsers[socket.request.session.user.username];
             // Broadcast to all clients to remove user
             io.emit("remove user", JSON.stringify(socket.request.session.user));
         }
+
+        // console.log(reason)
+        // delete backEndPlayers[socket.id]
+        // io.emit('updatePlayers', backEndPlayers)
     });
 
     socket.on("get users", () => {
@@ -241,6 +257,155 @@ io.on("connection", (socket) => {
     
 });
 
+
+//game play
+
+const backEndPlayers = {}
+const backEndProjectiles = {}
+let projectileId = 0
+
+io.on('connection', (socket) => {
+
+    console.log('a user connected')
+
+    backEndPlayers[socket.id] = {
+        x:500 * Math.random(),
+        y:500 * Math.random(),
+        code: 0,
+        radius: 8
+    } 
+
+    io.emit('updatePlayers', backEndPlayers)
+
+    socket.on('initCanvas', ({width, height}) => {
+        backEndPlayers[socket.id].canvas ={
+            width,
+            height
+        }
+    })
+
+    socket.on('shoot', ({ x, y, angle }) => {
+        projectileId++
+    
+        const velocity = {
+          x: Math.cos(angle) * 1,
+          y: Math.sin(angle) * 1
+        }
+    
+        backEndProjectiles[projectileId] = {
+          x,
+          y,
+          velocity,
+          playerId: socket.id
+        }
+    
+        console.log(backEndProjectiles)
+    })
+
+    socket.on('disconnect', (reason) => {
+        console.log(reason)
+        delete backEndPlayers[socket.id]
+        io.emit('updatePlayers', backEndPlayers)
+    })
+
+    socket.on('keydown', (keycode) => {
+        switch (keycode) {
+            case 'KeyW':
+              // keys.w.pressed = true
+              backEndPlayers[socket.id].code = 2;
+              break;
+        
+            case 'KeyA':
+              // keys.a.pressed = true
+              backEndPlayers[socket.id].code = 1;
+              break
+        
+            case 'KeyS':
+              // keys.s.pressed = true
+              backEndPlayers[socket.id].code = 4;
+              break
+        
+            case 'KeyD':
+              // keys.d.pressed = true
+              backEndPlayers[socket.id].code = 3;
+              break
+        }
+    })
+
+    socket.on('keyup', (keycode) => {
+        switch (keycode) {
+            case 'KeyW':
+              // keys.w.pressed = true
+              backEndPlayers[socket.id].code = 6;
+              break;
+        
+            case 'KeyA':
+              // keys.a.pressed = true
+              backEndPlayers[socket.id].code = 5;
+              break
+        
+            case 'KeyS':
+              // keys.s.pressed = true
+              backEndPlayers[socket.id].code = 8;
+              break
+        
+            case 'KeyD':
+              // keys.d.pressed = true
+              backEndPlayers[socket.id].code = 7;
+              break
+        }
+    })
+    
+
+    // console.log(backEndPlayers);
+})
+
+//backend ticker
+setInterval(() => {
+    for (const id in backEndProjectiles) {
+        backEndProjectiles[id].x += backEndProjectiles[id].velocity.x;
+        backEndProjectiles[id].y += backEndProjectiles[id].velocity.y;
+
+        const PROJECTILE_RADIUS = 5
+        if (
+            backEndProjectiles[id].x - PROJECTILE_RADIUS >=
+                backEndPlayers[backEndProjectiles[id].playerId]?.canvas?.width ||
+            backEndProjectiles[id].x + PROJECTILE_RADIUS <= 0 ||
+            backEndProjectiles[id].y - PROJECTILE_RADIUS >=
+                backEndPlayers[backEndProjectiles[id].playerId]?.canvas?.height ||
+            backEndProjectiles[id].y + PROJECTILE_RADIUS <= 0
+        ) {
+            delete backEndProjectiles[id]
+            continue
+        }
+
+        for (const playerId in backEndPlayers) {
+            const backEndPlayer = backEndPlayers[playerId]
+      
+            const DISTANCE = Math.hypot(
+                backEndProjectiles[id].x - backEndPlayer.x,
+                backEndProjectiles[id].y - backEndPlayer.y
+            )
+      
+            // collision detection
+            if (
+              DISTANCE < PROJECTILE_RADIUS + backEndPlayer.radius &&
+                backEndProjectiles[id].playerId !== playerId
+            ) {
+                if (backEndPlayers[backEndProjectiles[id].playerId])
+                    backEndPlayers[backEndProjectiles[id].playerId].score++
+      
+                console.log(backEndPlayers[backEndProjectiles[id].playerId])
+                delete backEndProjectiles[id]
+                delete backEndPlayers[playerId]
+                break
+            }
+        }
+    }
+
+    io.emit('updateProjectiles', backEndProjectiles) ;
+    io.emit('updatePlayers', backEndPlayers);
+})
 
 
 // Use a web server to listen at port 8000
