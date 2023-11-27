@@ -27,17 +27,23 @@ const GamePlayPageUI = (function() {
     
     const x = canvas.width / 2
     const y = canvas.height / 2
+
+    const totalGameTime = 180;
+    let gameStartTime = 0;
+    let timecheck = 0;
     
     const frontEndPlayers = {}
     const frontEndProjectiles = {}
+    const frontEndScoreBoxs = {}
 
     class Player {
-        constructor({ x, y, radius, color, username }) {
-          this.x = x
-          this.y = y
-          this.radius = radius
-          this.color = color
-          this.username = username
+        constructor({ x, y, radius, color, username, hp}) {
+          this.x = x,
+          this.y = y,
+          this.radius = radius,
+          this.color = color,
+          this.username = username,
+          this.hp = hp
         }
       
         draw() {
@@ -82,6 +88,69 @@ const GamePlayPageUI = (function() {
         }
     }
 
+    class Scorebox {
+        constructor({ x, y, radius, color = 'yellow'}) {
+          this.x = x
+          this.y = y
+          this.radius = radius
+          this.color = color
+        }
+      
+        draw() {
+          c.save()
+          c.shadowColor = this.color
+          c.shadowBlur = 20
+          c.beginPath()
+          c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+          c.fillStyle = this.color
+          c.fill()
+          c.restore()
+        }
+    }
+
+    class Hitbox {
+        constructor({ x, y, radius, color = 'yellow'}) {
+          this.x = x
+          this.y = y
+          this.radius = radius
+          this.color = color
+        }
+      
+        draw() {
+          c.save()
+          c.shadowColor = this.color
+          c.shadowBlur = 20
+          c.beginPath()
+          c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+          c.fillStyle = this.color
+          c.fill()
+          c.restore()
+        }
+    }
+
+    
+
+    socket.on('updateScoreBoxs', (backEndScoreBoxs) => {
+        for (const id in backEndScoreBoxs) {
+            const backEndScoreBox = backEndScoreBoxs[id]
+        
+            if (!frontEndScoreBoxs[id]) {
+                frontEndScoreBoxs[id] = new Scorebox({
+                    x: backEndScoreBox.x,
+                    y: backEndScoreBox.y,
+                    radius: 5,
+                    color: "yellow"
+                })
+            }
+        }
+        
+        for (const frontEndScoreBoxId in frontEndScoreBoxs) {
+            if (!backEndScoreBoxs[frontEndScoreBoxId]) {
+                delete frontEndScoreBoxs[frontEndScoreBoxId]
+            }
+        }
+    })
+
     
     socket.on('updateProjectiles', (backEndProjectiles) => {
       for (const id in backEndProjectiles) {
@@ -113,53 +182,56 @@ const GamePlayPageUI = (function() {
         const backEndPlayer = backEndPlayers[id]
     
         if (!frontEndPlayers[id]) {
-          frontEndPlayers[id] = new Player({
-            x: backEndPlayer.x,
-            y: backEndPlayer.y,
-            radius: 10,
-            color: backEndPlayer.color,
-            username: backEndPlayer.username
-          })
+            frontEndPlayers[id] = new Player({
+                x: backEndPlayer.x,
+                y: backEndPlayer.y,
+                radius: 10,
+                color: backEndPlayer.color,
+                username: backEndPlayer.username,
+                hp: backEndPlayer.hp,
+                hitrate: backEndPlayer.hitrate
+            })
     
-          document.querySelector(
-            '#playerLabels'
-          ).innerHTML += `<div data-id="${id}" data-score="${backEndPlayer.score}">${backEndPlayer.username}: ${backEndPlayer.score}</div>`
+            document.querySelector(
+                '#playerLabels'
+            ).innerHTML += `<div data-id="${id}" data-score="${backEndPlayer.score}">${backEndPlayer.username} (Score: ${backEndPlayer.score}, HP: ${backEndPlayer.hp}, Hit Rate: ${backEndPlayer.hitrate}) </div>`
         } else {
-          document.querySelector(
-            `div[data-id="${id}"]`
-          ).innerHTML = `${backEndPlayer.username}: ${backEndPlayer.score}`
+            document.querySelector(
+                `div[data-id="${id}"]`
+            ).innerHTML = `${backEndPlayer.username} (Score: ${backEndPlayer.score}, HP: ${backEndPlayer.hp}, Hit Rate: ${backEndPlayer.hitrate})`
     
-          document
-            .querySelector(`div[data-id="${id}"]`)
-            .setAttribute('data-score', backEndPlayer.score)
+            document
+                .querySelector(`div[data-id="${id}"]`)
+                .setAttribute('data-score', backEndPlayer.score)
+            
     
-          // sorts the players divs
-          const parentDiv = document.querySelector('#playerLabels')
-          const childDivs = Array.from(parentDiv.querySelectorAll('div'))
+            // sorts the players divs
+            const parentDiv = document.querySelector('#playerLabels')
+            const childDivs = Array.from(parentDiv.querySelectorAll('div'))
     
-          childDivs.sort((a, b) => {
+            childDivs.sort((a, b) => {
             const scoreA = Number(a.getAttribute('data-score'))
             const scoreB = Number(b.getAttribute('data-score'))
     
             return scoreB - scoreA
-          })
+        })
     
-          // removes old elements
-          childDivs.forEach((div) => {
+        // removes old elements
+        childDivs.forEach((div) => {
             parentDiv.removeChild(div)
-          })
-    
-          // adds sorted elements
-          childDivs.forEach((div) => {
+        })
+
+        // adds sorted elements
+        childDivs.forEach((div) => {
             parentDiv.appendChild(div)
-          })
+        })
     
-          frontEndPlayers[id].target = {
+        frontEndPlayers[id].target = {
             x: backEndPlayer.x,
             y: backEndPlayer.y
-          }
+        }
     
-          if (id === socket.id) {
+        if (id === socket.id) {
             const lastBackendInputIndex = playerInputs.findIndex((input) => {
               return backEndPlayer.sequenceNumber === input.sequenceNumber
             })
@@ -184,38 +256,55 @@ const GamePlayPageUI = (function() {
           delete frontEndPlayers[id]
         }
       }
-      console.log(frontEndPlayers);
+    //   console.log(frontEndPlayers);
     })
     
-
+    let animationId
     function animate() {
-      animationId = requestAnimationFrame(animate)
-      // c.fillStyle = 'rgba(0, 0, 0, 0.1)'
-      c.clearRect(0, 0, canvas.width, canvas.height)
-    
-      for (const id in frontEndPlayers) {
-        const frontEndPlayer = frontEndPlayers[id]
-    
-        // linear interpolation
-        if (frontEndPlayer.target) {
-          frontEndPlayers[id].x +=
-            (frontEndPlayers[id].target.x - frontEndPlayers[id].x) * 0.5
-          frontEndPlayers[id].y +=
-            (frontEndPlayers[id].target.y - frontEndPlayers[id].y) * 0.5
+        now = Date.now();
+        // console.log(now);
+        if (gameStartTime == 0) gameStartTime = now;
+
+        /* Update the time remaining */
+        const gameTimeSoFar = now - gameStartTime;
+        const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
+        console.log(timeRemaining);
+        if ((timeRemaining % 10 == 0) && (timecheck != timeRemaining)){
+            timecheck = timeRemaining;
+            console.log("Get");
+            socket.emit('generate', {});
+            console.log(frontEndScoreBoxs)
         }
+        // $("#time-remaining").text(timeRemaining);
+
+
+        animationId = requestAnimationFrame(animate)
+        // c.fillStyle = 'rgba(0, 0, 0, 0.1)'
+        c.clearRect(0, 0, canvas.width, canvas.height)
     
-        frontEndPlayer.draw()
-      }
-    
-      for (const id in frontEndProjectiles) {
-        const frontEndProjectile = frontEndProjectiles[id]
-        frontEndProjectile.draw()
-      }
-    
-      // for (let i = frontEndProjectiles.length - 1; i >= 0; i--) {
-      //   const frontEndProjectile = frontEndProjectiles[i]
-      //   frontEndProjectile.update()
-      // }
+        for (const id in frontEndPlayers) {
+            const frontEndPlayer = frontEndPlayers[id]
+        
+            // linear interpolation
+            if (frontEndPlayer.target) {
+            frontEndPlayers[id].x +=
+                (frontEndPlayers[id].target.x - frontEndPlayers[id].x) * 0.5
+            frontEndPlayers[id].y +=
+                (frontEndPlayers[id].target.y - frontEndPlayers[id].y) * 0.5
+            }
+            
+            frontEndPlayer.draw()
+        }
+        
+        for (const id in frontEndProjectiles) {
+            const frontEndProjectile = frontEndProjectiles[id]
+            frontEndProjectile.draw()
+        }
+
+        for (const id in frontEndScoreBoxs) {
+            const frontEndScoreBox = frontEndScoreBoxs[id]
+            frontEndScoreBox.draw()
+        }
     }
     
     animate()
@@ -311,6 +400,7 @@ const GamePlayPageUI = (function() {
           break
       }
     })
+    
 
     addEventListener('click', (event) => {
         const canvas = document.querySelector('canvas');
