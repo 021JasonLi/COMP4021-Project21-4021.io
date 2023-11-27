@@ -18,5 +18,21 @@
   "peter": {
     "name": "Peter Chan",
     "password": "$2b$10$TdnIP1GDNnjNHFghtLbJn.th6vWLp/IWDNcvX.SzB40Y5cgUfxEHu"
+  },
+  "a": {
+    "name": "a",
+    "password": "$2b$10$NHV9i0IS4HACCz.7duxTtuAUQ9UhiKLhQFDGzTLy3bdyGCYkHBmyG"
+  },
+  "z": {
+    "name": "z",
+    "password": "$2b$10$wiO.pRYFH/AveDU3SgB6YeD1HnFlUUlruWHKft.Srw3lGkgnLNl6G"
+  },
+  "maxwell": {
+    "name": "maxwell",
+    "password": "$2b$10$OP9m2nQc93N9VyAO.DBPaO/YG/zmg16PpGjOaMht5C6gMjToM6zBm"
+  },
+  "test": {
+    "name": "test",
+    "password": "$2b$10$m44cYDZlO2jIw0YPwGglfu7iWcfHuMsPciQP6evYShFPxGHWH/o3u"
   }
 }

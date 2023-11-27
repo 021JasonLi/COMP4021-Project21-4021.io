@@ -244,7 +244,21 @@ const GameFrontPageUI = (function() {
         $("#game-front-page").hide();
         // Show the game play page
         $("#game-play-page").show();
-    };
 
+        const Username = Authentication.getUser().username;
+        const socket = GamePlayPageUI.getSocket();
+        const devicePixelRatio = window.devicePixelRatio || 1
+    
+        canvas_width = 1024 * devicePixelRatio
+        canvas_height = 576 * devicePixelRatio
+
+        socket.emit('initGame', {
+            width: canvas_width,
+            height: canvas_height,
+            devicePixelRatio,
+            username: Username
+        })
+    };
+    
     return { initialize, startGame };
 })();
