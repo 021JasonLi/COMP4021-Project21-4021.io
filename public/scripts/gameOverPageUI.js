@@ -1,4 +1,4 @@
-// TODO: UI elements for the game over page
+
 
 
 const GameOverPageUI = (function() {
@@ -8,7 +8,8 @@ const GameOverPageUI = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Hide it
-        $("#game-over-page").hide();
+        // $("#game-over-page").hide();
+        $("#game-front-page").hide();
         // Initialize the components
         for (const component of components) {
             component.initialize();

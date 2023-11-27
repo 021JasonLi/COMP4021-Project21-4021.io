@@ -184,7 +184,7 @@ const GamePlayPageUI = (function() {
           delete frontEndPlayers[id]
         }
       }
-      console.log(frontEndPlayers);
+      // console.log(frontEndPlayers);
     })
     
 
