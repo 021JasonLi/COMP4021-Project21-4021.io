@@ -79,6 +79,7 @@
                         <li>You have <span class="how-to-play-important">10</span> lifes</li>
                         <li>You get <span class="how-to-play-important">3</span> points for killing player</li>
                         <li>You lose <span class="how-to-play-important">1</span> points when you die</li>
+                        <li>You have <span class="how-to-play-important">3</span> minutes or only 1 player alive</li>
                     </ul>
                 </div>
                 <div id="ready-group" class="row">
@@ -155,6 +156,10 @@
                 },
                 () => { SignInForm.show(); }
             );
+
+            // $("#game-front-page").hide();
+            // $("#game-over-page").show();
+            // GameOverPageUI.show();
 
         });
     </script>
