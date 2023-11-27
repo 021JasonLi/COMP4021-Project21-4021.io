@@ -238,19 +238,31 @@ io.on("connection", (socket) => {
 const backEndPlayers = {}
 const backEndProjectiles = {}
 const backEndScoreBoxs = {}
+const backEndHitboxs = {}
 
 const SPEED = 5
 const RADIUS = 10
-const PROJECTILE_RADIUS = 5
+const PROJECTILE_RADIUS = 5;
 let projectileId = 0
 let ScoreBoxId = 0
+let HitboxId = 0
 
 io.on('connection', (socket) => {
   console.log('a user connected')
 
   io.emit('updatePlayers', backEndPlayers)
 
-  socket.on('generate', () => {
+  socket.on('generate-hitbox', () => {
+    HitboxId++
+
+    backEndHitboxs[HitboxId] = {
+        x: 1024 * Math.random(),
+        y: 576 * Math.random(),
+    }
+    console.log(backEndHitboxs);
+  })
+
+  socket.on('generate-scorebox', () => {
     ScoreBoxId++
 
     backEndScoreBoxs[ScoreBoxId] = {
@@ -272,9 +284,11 @@ io.on('connection', (socket) => {
         x,
         y,
         velocity,
-        playerId: socket.id
+        playerId: socket.id,
+        radius: 5
     }
 
+    // backEndProjectiles[socket.id].radius = PROJECTILE_RADIUS;
     // console.log(backEndProjectiles)
   })
 
@@ -330,22 +344,24 @@ io.on('connection', (socket) => {
     }
 
     const playerSides = {
-      left: backEndPlayer.x - backEndPlayer.radius,
-      right: backEndPlayer.x + backEndPlayer.radius,
-      top: backEndPlayer.y - backEndPlayer.radius,
-      bottom: backEndPlayer.y + backEndPlayer.radius
+        left: backEndPlayer.x - backEndPlayer.radius,
+        right: backEndPlayer.x + backEndPlayer.radius,
+        top: backEndPlayer.y - backEndPlayer.radius,
+        bottom: backEndPlayer.y + backEndPlayer.radius
     }
 
     if (playerSides.left < 0) backEndPlayers[socket.id].x = backEndPlayer.radius
 
     if (playerSides.right > 1024)
-      backEndPlayers[socket.id].x = 1024 - backEndPlayer.radius
+       backEndPlayers[socket.id].x = 1024 - backEndPlayer.radius
 
-    if (playerSides.top < 0) backEndPlayers[socket.id].y = backEndPlayer.radius
+    if (playerSides.top < 0) {
+        backEndPlayers[socket.id].y = backEndPlayer.radius
+    }
 
     if (playerSides.bottom > 576)
-      backEndPlayers[socket.id].y = 576 - backEndPlayer.radius
-  })
+       backEndPlayers[socket.id].y = 576 - backEndPlayer.radius
+    })
 
 //   console.log(backEndPlayers);
 })
@@ -386,8 +402,11 @@ setInterval(() => {
                 if (backEndPlayers[backEndProjectiles[id].playerId]){
                     backEndPlayers[backEndProjectiles[id].playerId].score += 10
                     backEndPlayers[backEndProjectiles[id].playerId].hitrate += 1
-                    if (backEndPlayers[playerId].score > 0){
+                    if (backEndPlayers[playerId].score > 5){
                         backEndPlayers[playerId].score -= 5;
+                    }
+                    else if(backEndPlayers[playerId].score <= 5 && backEndPlayers[playerId].score > 0){
+                        backEndPlayers[playerId].score = 0;
                     }
                     backEndPlayers[playerId].hp--;
                 }
@@ -426,6 +445,34 @@ setInterval(() => {
         }
     }
 
+    for (const id in backEndHitboxs) {
+        // backEndProjectiles[id].x += backEndProjectiles[id].velocity.x
+        // backEndProjectiles[id].y += backEndProjectiles[id].velocity.y
+
+        const Hitbox_Radius = 5
+
+        for (const ProjectileId in backEndProjectiles) {
+            const backEndProjectile = backEndProjectiles[ProjectileId]
+
+            const DISTANCE = Math.hypot(
+                backEndHitboxs[id].x - backEndProjectile.x,
+                backEndHitboxs[id].y - backEndProjectile.y
+            )
+
+            // collision detection
+            if (
+                DISTANCE < Hitbox_Radius + backEndProjectile.radius
+            ) {
+                backEndPlayers[backEndProjectiles[ProjectileId].playerId].score += 20
+                // console.log(backEndPlayers[backEndProjectiles[id].playerId])
+                
+                delete backEndHitboxs[id]
+                break
+            }
+        }
+    }
+
+    io.emit('updateHitboxs', backEndHitboxs);
     io.emit('updateScoreBoxs', backEndScoreBoxs);
     io.emit('updateProjectiles', backEndProjectiles);
     io.emit('updatePlayers', backEndPlayers);

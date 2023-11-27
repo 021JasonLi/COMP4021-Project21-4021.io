@@ -35,6 +35,7 @@ const GamePlayPageUI = (function() {
     const frontEndPlayers = {}
     const frontEndProjectiles = {}
     const frontEndScoreBoxs = {}
+    const frontEndHitboxs = {}
 
     class Player {
         constructor({ x, y, radius, color, username, hp}) {
@@ -127,6 +128,27 @@ const GamePlayPageUI = (function() {
           c.restore()
         }
     }
+
+    socket.on('updateHitboxs', (backEndHitboxs) => {
+        for (const id in backEndHitboxs) {
+            const backEndHitbox = backEndHitboxs[id]
+        
+            if (!frontEndHitboxs[id]) {
+                frontEndHitboxs[id] = new Hitbox({
+                    x: backEndHitbox.x,
+                    y: backEndHitbox.y,
+                    radius: 5,
+                    color: "black"
+                })
+            }
+        }
+        
+        for (const frontEndHitboxId in frontEndHitboxs) {
+            if (!backEndHitboxs[frontEndHitboxId]) {
+                delete frontEndHitboxs[frontEndHitboxId]
+            }
+        }
+    })
 
     
 
@@ -271,9 +293,15 @@ const GamePlayPageUI = (function() {
         console.log(timeRemaining);
         if ((timeRemaining % 10 == 0) && (timecheck != timeRemaining)){
             timecheck = timeRemaining;
+            // console.log("Get");
+            socket.emit('generate-scorebox', {});
+            // console.log(frontEndScoreBoxs)
+        }
+        if ((timeRemaining % 25 == 0) && (timecheck != timeRemaining)){
+            timecheck = timeRemaining;
             console.log("Get");
-            socket.emit('generate', {});
-            console.log(frontEndScoreBoxs)
+            socket.emit('generate-hitbox', {});
+            // console.log(frontHitboxs)
         }
         // $("#time-remaining").text(timeRemaining);
 
@@ -304,6 +332,11 @@ const GamePlayPageUI = (function() {
         for (const id in frontEndScoreBoxs) {
             const frontEndScoreBox = frontEndScoreBoxs[id]
             frontEndScoreBox.draw()
+        }
+
+        for (const id in frontEndHitboxs) {
+            const frontEndHitbox = frontEndHitboxs[id]
+            frontEndHitbox.draw()
         }
     }
     
