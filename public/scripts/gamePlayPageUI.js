@@ -31,6 +31,7 @@ const GamePlayPageUI = (function() {
     const totalGameTime = 180;
     let gameStartTime = 0;
     let timecheck = 0;
+    let start = false;
     
     const frontEndPlayers = {}
     const frontEndProjectiles = {}
@@ -283,27 +284,35 @@ const GamePlayPageUI = (function() {
     
     let animationId
     function animate() {
-        now = Date.now();
-        // console.log(now);
-        if (gameStartTime == 0) gameStartTime = now;
+        socket.on("start", () => {
+            start = true;
+        })
+        if (start){
+            now = Date.now();
+            // console.log(now);
+            if (gameStartTime == 0) gameStartTime = now;
 
-        /* Update the time remaining */
-        const gameTimeSoFar = now - gameStartTime;
-        const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
-        console.log(timeRemaining);
-        if ((timeRemaining % 10 == 0) && (timecheck != timeRemaining)){
-            timecheck = timeRemaining;
-            // console.log("Get");
-            socket.emit('generate-scorebox', {});
-            // console.log(frontEndScoreBoxs)
+            /* Update the time remaining */
+            const gameTimeSoFar = now - gameStartTime;
+            const timeRemaining = Math.ceil((totalGameTime * 1000 - gameTimeSoFar) / 1000);
+            // console.log(timeRemaining);
+            
+
+            if ((timeRemaining % 10 == 0) && (timecheck != timeRemaining)){
+                timecheck = timeRemaining;
+                // console.log("Get");
+                socket.emit('generate-scorebox');
+                // console.log(frontEndScoreBoxs)
+            }
+            if ((timeRemaining % 25 == 0) && (timecheck != timeRemaining)){
+                timecheck = timeRemaining;
+                // console.log("Get");
+                socket.emit('generate-hitbox');
+                // console.log(frontHitboxs)
+            }
+            // $("#timecount").text(timeRemaining);
+            document.querySelector('#timecount').innerHTML = `Time Left: <tspan>${timeRemaining}</tspan>`
         }
-        if ((timeRemaining % 25 == 0) && (timecheck != timeRemaining)){
-            timecheck = timeRemaining;
-            console.log("Get");
-            socket.emit('generate-hitbox', {});
-            // console.log(frontHitboxs)
-        }
-        // $("#time-remaining").text(timeRemaining);
 
 
         animationId = requestAnimationFrame(animate)
@@ -354,6 +363,9 @@ const GamePlayPageUI = (function() {
       },
       d: {
         pressed: false
+      },
+      shift: {
+        pressed: false
       }
     }
     
@@ -362,32 +374,41 @@ const GamePlayPageUI = (function() {
     let sequenceNumber = 0
     setInterval(() => {
       if (keys.w.pressed) {
-        sequenceNumber++
-        playerInputs.push({ sequenceNumber, dx: 0, dy: -SPEED })
-        // frontEndPlayers[socket.id].y -= SPEED
-        socket.emit('keydown', { keycode: 'KeyW', sequenceNumber })
+        sequenceNumber++;
+        playerInputs.push({ sequenceNumber, dx: 0, dy: -SPEED });
+        // frontEndPlayers[socket.id].y -= SPEED;
+        socket.emit('keydown', { keycode: 'KeyW', sequenceNumber });
       }
     
       if (keys.a.pressed) {
-        sequenceNumber++
-        playerInputs.push({ sequenceNumber, dx: -SPEED, dy: 0 })
-        // frontEndPlayers[socket.id].x -= SPEED
-        socket.emit('keydown', { keycode: 'KeyA', sequenceNumber })
+        sequenceNumber++;
+        playerInputs.push({ sequenceNumber, dx: -SPEED, dy: 0 });
+        // frontEndPlayers[socket.id].x -= SPEED;
+        socket.emit('keydown', { keycode: 'KeyA', sequenceNumber });
       }
     
       if (keys.s.pressed) {
-        sequenceNumber++
-        playerInputs.push({ sequenceNumber, dx: 0, dy: SPEED })
-        // frontEndPlayers[socket.id].y += SPEED
-        socket.emit('keydown', { keycode: 'KeyS', sequenceNumber })
+        sequenceNumber++;
+        playerInputs.push({ sequenceNumber, dx: 0, dy: SPEED });
+        // frontEndPlayers[socket.id].y += SPEED;
+        socket.emit('keydown', { keycode: 'KeyS', sequenceNumber });
       }
     
       if (keys.d.pressed) {
-        sequenceNumber++
-        playerInputs.push({ sequenceNumber, dx: SPEED, dy: 0 })
-        // frontEndPlayers[socket.id].x += SPEED
-        socket.emit('keydown', { keycode: 'KeyD', sequenceNumber })
+        sequenceNumber++;
+        playerInputs.push({ sequenceNumber, dx: SPEED, dy: 0 });
+        // frontEndPlayers[socket.id].x += SPEED;
+        socket.emit('keydown', { keycode: 'KeyD', sequenceNumber });
       }
+
+      console.log(keys.shift.pressed);
+      if (keys.shift.pressed) {
+        socket.emit('cheat', ({check: keys.shift.pressed, id: socket.id}));
+      }
+      else{
+        socket.emit('cheat', ({check: keys.shift.pressed, id: socket.id}));
+      }
+
     }, 15)
     
     document.addEventListener('keydown', (event) => {
@@ -395,20 +416,24 @@ const GamePlayPageUI = (function() {
     
       switch (event.code) {
         case 'KeyW':
-          keys.w.pressed = true
-          break
+            keys.w.pressed = true;
+            break;
     
         case 'KeyA':
-          keys.a.pressed = true
-          break
+            keys.a.pressed = true;
+            break;
     
         case 'KeyS':
-          keys.s.pressed = true
-          break
+            keys.s.pressed = true;
+            break;
     
         case 'KeyD':
-          keys.d.pressed = true
-          break
+            keys.d.pressed = true;
+            break;
+        
+        case 'ShiftLeft':
+            keys.shift.pressed = true;
+            break;
       }
     })
     
@@ -417,20 +442,24 @@ const GamePlayPageUI = (function() {
     
       switch (event.code) {
         case 'KeyW':
-          keys.w.pressed = false
-          break
+            keys.w.pressed = false;
+            break;
     
         case 'KeyA':
-          keys.a.pressed = false
-          break
+            keys.a.pressed = false;
+            break;
     
         case 'KeyS':
-          keys.s.pressed = false
-          break
+            keys.s.pressed = false;
+            break;
     
         case 'KeyD':
-          keys.d.pressed = false
-          break
+            keys.d.pressed = false;
+            break;
+        
+        case 'ShiftLeft':
+            keys.shift.pressed = false;
+            break;
       }
     })
     
