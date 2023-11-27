@@ -366,6 +366,18 @@ canvas {
     font-size: 100%;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: aliceblue;
+    border-radius: 20px;
+    margin: 10px 0;
+}
+
 th {
-    padding: 0 15px;
+    padding: 0 10px;
+}
+
+td {
+    text-align: center;
 }
