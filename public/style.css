@@ -281,3 +281,11 @@ button.icon:active {
     width: 270px;
     align-self: stretch;
 }
+
+/* game play */
+canvas {
+    width: 1024px;
+    height: 576px;
+    background-image: url('image/background.png');
+}
+
