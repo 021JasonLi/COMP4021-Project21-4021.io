@@ -2,8 +2,7 @@ const GameOverPageUI = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Hide it
-        // $("#game-over-page").hide();
-        $("#game-front-page").hide(); // temporary
+        $("#game-over-page").hide();
 
         // Set up the play again button
         $("#play-again-button").on("click", () => {

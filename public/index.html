@@ -70,31 +70,16 @@
         </div>
         <div id="main-panel" class="row">
             <div id="how-to-play" class="col">
-                <div id="how-to-play" class="row">How to play</div>
-                <div id="movement-control" class="row">
-                    <div class="caption">Press</div>
-                    <div id="key-group" class="row">
-                        <div class="key">W</div>
-                        <div class="key">A</div>
-                        <div class="key">S</div>
-                        <div class="key">D</div>
-                    </div>
-                    <div class="caption">to move your character</div>
-                </div>
-                <div id="click-control" class="row">
-                    <div class="caption">Left click to shoot bullet</div>
-                </div>
-                <div id="score-control" class="row">
-                    <div class="caption">Score points by killing other players</div>
-                </div>
-                <div id="exp-control" class="row">
-                    <div class="caption">Gain EXP by shooting XP boxes</div>
-                </div>
-                <div id="level-control" class="row">
-                    <div class="caption">Level up to gain more HP and become more powerful</div>
-                </div>
-                <div id="powerup-control" class="row">
-                    <div class="caption">Shoot powerups to gain special abilities</div>
+                <div id="how-to-play-text">How to play</div>
+                <div id="how-to-play-list-container">
+                    <ul id="how-to-play-list">
+                        <li>Move your character with <span class="how-to-play-important">W</span> <span class="how-to-play-important">S</span> <span class="how-to-play-important">A</span> <span class="how-to-play-important">D</span> </li>
+                        <li>Shoot bullet to others by <span class="how-to-play-important">left click</span></li>
+                        <li>You have <span class="how-to-play-important">10</span> lifes</li>
+                        <li>You get <span class="how-to-play-important">3</span> points for killing player</li>
+                        <li>You lose <span class="how-to-play-important">1</span> points when you die</li>
+                        <li>more...</li>
+                    </ul>
                 </div>
                 <div id="ready-group" class="row">
                     <div id="ready-text" class="row">Ready to play?</div>
@@ -170,8 +155,6 @@
                 },
                 () => { SignInForm.show(); }
             );
-
-            GameOverPageUI.show();
 
         });
     </script>

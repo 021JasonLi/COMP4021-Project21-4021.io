@@ -342,6 +342,30 @@ button.icon:active {
     align-self: stretch;
 }
 
+/* game front page */
+#how-to-play-list-container {
+    text-align: center;
+}
+
+#how-to-play-list {
+    display: inline-block;
+    text-align: left;
+}
+
+#how-to-play-text {
+    font-size: 200%;
+    font-weight: bold;
+    color: blue;
+    text-align: center;
+}
+
+.how-to-play-important {
+    font-size: 120%;
+    font-weight: bold;
+    color: red;
+    text-align: center;
+}
+
 /* game play */
 canvas {
     width: 1024px;
