@@ -253,6 +253,14 @@ io.on("connection", (socket) => {
         }
 
     });
+
+    socket.on("reset ready", () => {
+        // Update the ready status of the user
+        onlineUsers[socket.request.session.user.username].ready = false;
+        socket.request.session.user.ready = false;
+        // Broadcast to all clients to update user
+        io.emit("update user", JSON.stringify(socket.request.session.user));
+    });
     
 });
 

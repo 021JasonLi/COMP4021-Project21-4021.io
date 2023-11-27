@@ -1,16 +1,16 @@
 const GameOverPageUI = (function() {
-    // The components of the UI are put here
-    const components = [];
-
     // This function initializes the UI
     const initialize = function() {
         // Hide it
         // $("#game-over-page").hide();
-        $("#game-front-page").hide();
-        // Initialize the components
-        for (const component of components) {
-            component.initialize();
-        }
+        $("#game-front-page").hide(); // temporary
+
+        // Set up the play again button
+        $("#play-again-button").on("click", () => {
+            $("#game-over-page").hide();
+            $("#game-front-page").show();
+            Socket.resetReady();
+        });
     };
 
     const show = function() {
@@ -25,7 +25,7 @@ const GameOverPageUI = (function() {
                     const playersStats = json.players;
                     const playersStatsTable = $("#player-stats");
                     playersStatsTable.find("tbody").empty(); // Clear the table body
-                    
+
                     for (const player in playersStats) {
                         const stats = playersStats[player];
                         const row = $("<tr></tr>");
