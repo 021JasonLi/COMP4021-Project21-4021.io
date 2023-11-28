@@ -181,14 +181,14 @@ app.get("/signout", (req, res) => {
 // Handle the /game-over-data endpoint
 app.get("/game-over-data", (req, res) => {
     // Reading the users.json file
-    const players = JSON.parse(fs.readFileSync("./data/temp-players-stats.json"));
+    const players = gamedata;
 
     // Getting the winner
     let highestScore = 0;
     let winner = "";
     for (const player in players) {
-        if (players[player].score > highestScore) {
-            highestScore = players[player].score;
+        if (players[player].Score >= highestScore) {
+            highestScore = players[player].Score;
             winner = player;
         }
     }
@@ -322,7 +322,9 @@ io.on('connection', (socket) => {
     backEndHitboxs[HitboxId] = {
         x: 1024 * Math.random(),
         y: 576 * Math.random(),
-        velocity: random_velocity
+        velocity: random_velocity,
+        radius: 13,
+        hp: 2
     }
     // console.log(backEndHitboxs);
   })
@@ -549,7 +551,7 @@ setInterval(() => {
         backEndHitboxs[id].x += backEndHitboxs[id].velocity.x
         backEndHitboxs[id].y += backEndHitboxs[id].velocity.y
 
-        const Hitbox_Radius = 10
+        const Hitbox_Radius = backEndHitboxs[id].radius;
 
         for (const ProjectileId in backEndProjectiles) {
             const backEndProjectile = backEndProjectiles[ProjectileId]
@@ -563,10 +565,15 @@ setInterval(() => {
             if (
                 DISTANCE < Hitbox_Radius + backEndProjectile.radius
             ) {
-                backEndPlayers[backEndProjectiles[ProjectileId].playerId].score += 20
                 // console.log(backEndPlayers[backEndProjectiles[id].playerId])
-                
-                delete backEndHitboxs[id]
+                let tempId = backEndProjectiles[ProjectileId].playerId;
+                delete backEndProjectiles[ProjectileId];
+                backEndHitboxs[id].hp--;
+                backEndHitboxs[id].radius -= 5;
+                if (backEndHitboxs[id].hp <= 0){
+                    backEndPlayers[tempId].score += 20
+                    delete backEndHitboxs[id]
+                }
                 break
             }
         }

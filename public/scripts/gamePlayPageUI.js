@@ -144,12 +144,14 @@ const GamePlayPageUI = (function() {
                 frontEndHitboxs[id] = new Hitbox({
                     x: backEndHitbox.x,
                     y: backEndHitbox.y,
-                    radius: 10,
+                    radius: backEndHitbox.radius,
+                    hp: backEndHitbox.hp, 
                     color: "black"
                 })
             } else {
-              frontEndHitboxs[id].x += backEndHitboxs[id].velocity.x
-              frontEndHitboxs[id].y += backEndHitboxs[id].velocity.y
+              frontEndHitboxs[id].x += backEndHitboxs[id].velocity.x;
+              frontEndHitboxs[id].y += backEndHitboxs[id].velocity.y;
+              frontEndHitboxs[id].radius = backEndHitboxs[id].radius;
             }
         }
         
