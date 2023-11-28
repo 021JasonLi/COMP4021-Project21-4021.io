@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Shizuru&display=swap");
 
 :root {
     --field-color: gray;
@@ -13,17 +14,21 @@
 
     --header-background: linear-gradient(to right, rgb(29, 29, 203, 0.8), rgb(173, 216, 230, 0.7));
     --main-panel-background: none;
-    --game-front-page-background: linear-gradient(127deg, rgb(197, 173, 230), rgb(197, 173, 230) 70.71%), 
-    --game-over-page-background: linear-gradient(127deg, rgb(197, 173, 230), rgb(197, 173, 230) 70.71%), 
-    linear-gradient(217deg, rgb(173, 215, 230), rgb(173, 216, 230) 70%), 
-                                  
-                                  linear-gradient(336deg, rgb(230, 173, 214), rgb(230, 173, 223) 70.71%);
+    --game-front-page-background: linear-gradient(127deg, rgb(215 186 255), rgba(197, 173, 230, 0.5) 70.71%),
+                                  linear-gradient(217deg, rgb(80 209 255), rgba(173, 216, 230, 0.5) 70.71%),
+                                  linear-gradient(336deg, rgb(255 128 219), rgba(230, 173, 223, 0.5) 70.71%);
     --online-users-panel-background: rgb(138, 207, 235, 0.7);
     --chat-panel-background: linear-gradient(rgb(165, 151, 219, 1), rgba(151, 169, 219, 0.2));
+    --game-over-page-background: linear-gradient(217deg, rgba(0, 255, 213, 0.8), rgba(255,0,0,0) 70.71%),
+                                 linear-gradient(127deg, rgba(0, 255, 157, 0.8), rgba(0,255,0,0) 70.71%),
+                                 linear-gradient(336deg, rgba(0, 64, 255, 0.8), rgba(0,0,255,0) 70.71%);
 
     --title-color: white;
     --caption-color: white;
     --icon-color: rgb(27, 17, 69);
+    --game-over-captopn-color: rgb(217 51 135);
+    --shadow-color: rgb(243 255 228);
+    --table-color: rgb(71 56 137);
 
     --font-color: black;
     --date-color: gray;
@@ -453,18 +458,13 @@ button.icon:active {
 }
 
 #game-front-page {
-    /* background-image: url(image/bg-light.jpg);
-    background-size: cover; */
-    /* background-repeat: no-repeat; */
-    /* background-position: center; */
-    /* background-attachment: fixed; */
     height: 100%;
     width: 100%;
     /* padding: 0; */
-    background: linear-gradient(217deg, rgba(86, 183, 218, 0.5), rgb(173, 207, 230) 70.71%), 
+    /* background: linear-gradient(217deg, rgba(86, 183, 218, 0.5), rgb(173, 207, 230) 70.71%), 
                 linear-gradient(127deg, rgba(159, 110, 228, 0.5), rgb(197, 173, 230) 70.71%), 
-                linear-gradient(336deg, rgba(224, 122, 195, 0.5), rgb(230, 173, 223) 70.71%)
-    /* background: var(--game-front-page-background); */
+                linear-gradient(336deg, rgba(224, 122, 195, 0.5), rgb(230, 173, 223) 70.71%) */
+    background: var(--game-front-page-background);
 }
 
 .key {
@@ -477,7 +477,7 @@ button.icon:active {
       0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
     color: #333;
     display: inline-block;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 700;
     line-height: 1;
     padding: 6px 9px;
@@ -527,21 +527,39 @@ canvas {
 
 /* game over page */
 #game-over-page {
-    background: linear-gradient(217deg, rgba(86, 183, 218, 0.5), rgb(173, 207, 230) 70.71%), 
-                linear-gradient(127deg, rgba(159, 110, 228, 0.5), rgb(197, 173, 230) 70.71%), 
-                linear-gradient(336deg, rgba(224, 122, 195, 0.5), rgb(230, 173, 223) 70.71%)
+    width: 100%;
+    height: 100%;
+    background: var(--game-over-page-background);
+}
+        
+#game-over-page .col {
+    justify-content: flex-start;       
+}
+
+#game-over-body {
+    width: 100%;
+    height: calc(100% - 80px);
+    
 }
 
 #game-over-message {
+    font-family: Shizuru, cursive;
     font-size: 300%;
     font-weight: bold;
-    color: red;
+    text-transform: uppercase;
+    color: var(--game-over-captopn-color);
+    text-shadow: 1px 1px 0 var(--shadow-color), -1px 1px 0 var(--shadow-color), 1px -1px 0 var(--shadow-color), -1px -1px 0 var(--shadow-color), 0px 1px 0 var(--shadow-color), 0px -1px 0 var(--shadow-color), -1px 0px 0 var(--shadow-color), 1px 0px 0 var(--shadow-color), 2px 2px 0 var(--shadow-color), -2px 2px 0 var(--shadow-color), 2px -2px 0 var(--shadow-color), -2px -2px 0 var(--shadow-color), 0px 2px 0 var(--shadow-color), 0px -2px 0 var(--shadow-color), -2px 0px 0 var(--shadow-color), 2px 0px 0 var(--shadow-color), 1px 2px 0 var(--shadow-color), -1px 2px 0 var(--shadow-color), 1px -2px 0 var(--shadow-color), -1px -2px 0 var(--shadow-color), 2px 1px 0 var(--shadow-color), -2px 1px 0 var(--shadow-color), 2px -1px 0 var(--shadow-color), -2px -1px 0 var(--shadow-color);
 }
 
 #game-over-winner {
     font-size: 200%;
     font-weight: bold;
-    color: red;
+    color: var(--game-over-captopn-color);
+}
+
+#game-over-winner .material-symbols-rounded {
+    font-size: 120%;
+    color: var(--icon-color);
 }
 
 #player-stats {
@@ -549,17 +567,20 @@ canvas {
 }
 
 table {
-    width: 100%;
+    /* width: 100%; */
     border-collapse: collapse;
     background-color: aliceblue;
-    border-radius: 20px;
-    margin: 10px 0;
+    border-radius: 10px;
+    margin: 15px 0;
 }
 
 th {
-    padding: 0 10px;
+    padding: 5px 15px;
+    color: var(--table-color);
 }
 
 td {
     text-align: center;
+    padding: 5px 15px;
+    color: var(--icon-color);
 }
