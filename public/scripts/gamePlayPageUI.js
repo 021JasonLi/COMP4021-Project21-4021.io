@@ -13,11 +13,6 @@ const GamePlayPageUI = (function() {
         return socket;
     };
 
-    const GameEnd = function(){
-        $("#game-play-page").hide();
-        $("#game-over-page").show();
-    };
-
     const canvas = document.querySelector('canvas')
     const c = canvas.getContext('2d')
     
@@ -35,8 +30,13 @@ const GamePlayPageUI = (function() {
 
     const totalGameTime = 180;
     let gameStartTime = 0;
-    let timecheck = 0;
+    let timecheck1 = 0;
+    let timecheck2 = 0;
     let start = false;
+
+    const sounds = {
+      background: new Audio("sound/game-play-music.mp3")
+    };
     
     const frontEndPlayers = {}
     const frontEndProjectiles = {}
@@ -295,6 +295,7 @@ const GamePlayPageUI = (function() {
     function animate() {
         socket.on("start", () => {
             start = true;
+            sounds.background.play();
         })
         if (start){
             now = Date.now();
@@ -307,14 +308,14 @@ const GamePlayPageUI = (function() {
             // console.log(timeRemaining);
             
 
-            if ((timeRemaining % 10 == 0) && (timecheck != timeRemaining)){
-                timecheck = timeRemaining;
+            if ((timeRemaining % 10 == 0) && (timecheck1 != timeRemaining)){
+                timecheck1 = timeRemaining;
                 // console.log("Get");
                 socket.emit('generate-scorebox');
                 // console.log(frontEndScoreBoxs)
             }
-            if ((timeRemaining % 25 == 0) && (timecheck != timeRemaining)){
-                timecheck = timeRemaining;
+            if ((timeRemaining % 15 == 0) && (timecheck2 != timeRemaining)){
+                timecheck2 = timeRemaining;
                 // console.log("Get");
                 socket.emit('generate-hitbox');
                 // console.log(frontHitboxs)
@@ -325,8 +326,9 @@ const GamePlayPageUI = (function() {
             console.log(Object.keys(frontEndPlayers).length);
             if ((timeRemaining == 0) || (Object.keys(frontEndPlayers).length == 1)){
               start = false;
+              sounds.background.pause();
               socket.emit("GameEnd");
-              GameEnd();
+              GameOverPageUI.show();
             }
         }
 
@@ -502,5 +504,5 @@ const GamePlayPageUI = (function() {
     })
 
 
-    return { initialize, getSocket, GameEnd };
+    return { initialize, getSocket };
 })();
