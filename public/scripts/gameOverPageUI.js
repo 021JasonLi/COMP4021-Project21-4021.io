@@ -43,6 +43,8 @@ const GameOverPageUI = (function() {
 
         // Hide the game play page
         $("#game-play-page").hide();
+        // Disable the ready button
+        $("#ready-button").prop("disabled", false);
         // Show the game over page
         $("#game-over-page").show();
     }
