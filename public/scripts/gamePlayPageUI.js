@@ -488,8 +488,7 @@ const GamePlayPageUI = (function () {
         }
     })
 
-
-    addEventListener('click', (event) => {
+    $("#game-play-page").on("click", () => {
         const canvas = document.querySelector('canvas');
         const { top, left } = canvas.getBoundingClientRect();
 
