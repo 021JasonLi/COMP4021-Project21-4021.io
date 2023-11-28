@@ -2,6 +2,7 @@ const SignInForm = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Hide it
+        $("#register-form").hide();
         $("#signin-overlay").hide();
 
         // Submit event for the signin form
@@ -18,7 +19,9 @@ const SignInForm = (function() {
                 () => {
                     hide();
                     UserPanel.update(Authentication.getUser());
+                    UserPanelOverPage.update(Authentication.getUser());
                     UserPanel.show();
+                    UserPanelOverPage.show();
                     Socket.connect();
                 },
                 (error) => { $("#signin-message").text(error); }
@@ -51,6 +54,16 @@ const SignInForm = (function() {
                 (error) => { $("#register-message").text(error); }
             );
         });
+
+        $("#register-button").on("click", () => {
+            $("#register-form").show();
+            $("#signin-form").hide();
+        });
+
+        $("#signin-button").on("click", () => {
+            $("#signin-form").show();
+            $("#register-form").hide();
+        });
     };
 
     // This function shows the form
@@ -81,6 +94,7 @@ const UserPanel = (function() {
                 () => {
                     Socket.disconnect();
                     hide();
+                    UserPanelOverPage.hide();
                     SignInForm.show();
                     $("#ready-button").prop("disabled", false);
                 }
@@ -194,7 +208,8 @@ const CountDownOverlay = (function() {
 
     // This function shows the overlay and starts the countdown
     const show = function() {
-        let timeRemaining = parseInt($("#countdown").text());
+        let timeRemaining = 3;
+        $("#countdown").text(timeRemaining);
         const countdownSound = new Audio("../sound/countdown.mp3");
 
         function countdown() {
@@ -211,6 +226,7 @@ const CountDownOverlay = (function() {
             } else {
                 $("#countdown").text("Start!");
                 GameFrontPageUI.startGame();
+                Socket.resetReady();
             }
         }
 
@@ -244,7 +260,24 @@ const GameFrontPageUI = (function() {
         $("#game-front-page").hide();
         // Show the game play page
         $("#game-play-page").show();
-    };
 
+        // $("#game-over-page").hide();
+
+        const Username = Authentication.getUser().username;
+        const socket = GamePlayPageUI.getSocket();
+        const devicePixelRatio = window.devicePixelRatio || 1 ;
+    
+        canvas_width = 1024 * devicePixelRatio
+        canvas_height = 576 * devicePixelRatio
+
+        socket.emit('initGame', {
+            width: canvas_width,
+            height: canvas_height,
+            devicePixelRatio,
+            username: Username
+        })
+
+    };
+    
     return { initialize, startGame };
 })();

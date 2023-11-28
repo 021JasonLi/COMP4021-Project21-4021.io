@@ -63,5 +63,10 @@ const Socket = (function() {
         socket.emit("ready");
     };
 
-    return { getSocket, connect, disconnect, ready };
+    // This function sends a reset ready request
+    const resetReady = function() {
+        socket.emit("reset ready");
+    };
+
+    return { getSocket, connect, disconnect, ready, resetReady };
 })();
