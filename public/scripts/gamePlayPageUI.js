@@ -28,7 +28,7 @@ const GamePlayPageUI = (function () {
     const x = canvas.width / 2
     const y = canvas.height / 2
 
-    const totalGameTime = 180;
+    const totalGameTime = 120;
     // const totalGameTime = 20;
     let gameStartTime = 0;
     let timecheck1 = 0;
