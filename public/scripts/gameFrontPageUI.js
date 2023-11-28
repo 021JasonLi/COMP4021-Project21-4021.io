@@ -212,6 +212,7 @@ const CountDownOverlay = (function() {
             } else {
                 $("#countdown").text("Start!");
                 GameFrontPageUI.startGame();
+                Socket.resetReady();
             }
         }
 

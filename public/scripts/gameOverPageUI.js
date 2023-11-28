@@ -8,7 +8,6 @@ const GameOverPageUI = (function() {
         $("#play-again-button").on("click", () => {
             $("#game-over-page").hide();
             $("#game-front-page").show();
-            Socket.resetReady();
         });
     };
 
