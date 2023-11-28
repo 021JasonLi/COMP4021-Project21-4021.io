@@ -29,6 +29,7 @@ const GamePlayPageUI = (function () {
     const y = canvas.height / 2
 
     const totalGameTime = 180;
+    // const totalGameTime = 20;
     let gameStartTime = 0;
     let timecheck1 = 0;
     let timecheck2 = 0;
@@ -45,13 +46,13 @@ const GamePlayPageUI = (function () {
     const frontEndHitboxs = {}
 
     class Player {
-        constructor({ x, y, radius, color, username, hp }) {
-            this.x = x,
-                this.y = y,
-                this.radius = radius,
-                this.color = color,
-                this.username = username,
-                this.hp = hp
+        constructor({ x, y, radius, color, username, hp}) {
+          this.x = x,
+          this.y = y,
+          this.radius = radius,
+          this.color = color,
+          this.username = username
+          // this.hp = hp
         }
 
         draw() {
@@ -213,48 +214,48 @@ const GamePlayPageUI = (function () {
     })
 
     socket.on('updatePlayers', (backEndPlayers) => {
-        for (const id in backEndPlayers) {
-            const backEndPlayer = backEndPlayers[id]
-
-            if (!frontEndPlayers[id]) {
-                frontEndPlayers[id] = new Player({
-                    x: backEndPlayer.x,
-                    y: backEndPlayer.y,
-                    radius: 10,
-                    color: backEndPlayer.color,
-                    username: backEndPlayer.username,
-                    hp: backEndPlayer.hp,
-                    hitrate: backEndPlayer.hitrate
-                })
-
-                document.querySelector(
-                    '#playerLabels'
-                ).innerHTML += `<div data-id="${id}" data-score="${backEndPlayer.score}">${backEndPlayer.username} (Score: ${backEndPlayer.score}, HP: ${backEndPlayer.hp}, Hit Rate: ${backEndPlayer.hitrate}) </div>`
-            } else {
-                document.querySelector(
-                    `div[data-id="${id}"]`
-                ).innerHTML = `${backEndPlayer.username} (Score: ${backEndPlayer.score}, HP: ${backEndPlayer.hp}, Hit Rate: ${backEndPlayer.hitrate})`
-
-                document
-                    .querySelector(`div[data-id="${id}"]`)
-                    .setAttribute('data-score', backEndPlayer.score)
-
-
-                // sorts the players divs
-                const parentDiv = document.querySelector('#playerLabels')
-                const childDivs = Array.from(parentDiv.querySelectorAll('div'))
-
-                childDivs.sort((a, b) => {
-                    const scoreA = Number(a.getAttribute('data-score'))
-                    const scoreB = Number(b.getAttribute('data-score'))
-
-                    return scoreB - scoreA
-                })
-
-                // removes old elements
-                childDivs.forEach((div) => {
-                    parentDiv.removeChild(div)
-                })
+      for (const id in backEndPlayers) {
+        const backEndPlayer = backEndPlayers[id]
+    
+        if (!frontEndPlayers[id]) {
+            frontEndPlayers[id] = new Player({
+                x: backEndPlayer.x,
+                y: backEndPlayer.y,
+                radius: 10,
+                color: backEndPlayer.color,
+                username: backEndPlayer.username,
+                hp: backEndPlayer.hp,
+                hitrate: backEndPlayer.hitrate
+            })
+    
+            document.querySelector(
+                '#playerLabels'
+            ).innerHTML += `<div data-id="${id}" data-score="${backEndPlayer.score}">${backEndPlayer.username} (Score: ${backEndPlayer.score}, Hit Rate: ${backEndPlayer.hitrate}) </div>`
+        } else {
+            document.querySelector(
+                `div[data-id="${id}"]`
+            ).innerHTML = `${backEndPlayer.username} (Score: ${backEndPlayer.score}, Hit Rate: ${backEndPlayer.hitrate})`
+    
+            document
+                .querySelector(`div[data-id="${id}"]`)
+                .setAttribute('data-score', backEndPlayer.score)
+            
+    
+            // sorts the players divs
+            const parentDiv = document.querySelector('#playerLabels')
+            const childDivs = Array.from(parentDiv.querySelectorAll('div'))
+    
+            childDivs.sort((a, b) => {
+            const scoreA = Number(a.getAttribute('data-score'))
+            const scoreB = Number(b.getAttribute('data-score'))
+    
+            return scoreB - scoreA
+        })
+    
+        // removes old elements
+        childDivs.forEach((div) => {
+            parentDiv.removeChild(div)
+        })
 
                 // adds sorted elements
                 childDivs.forEach((div) => {
@@ -327,11 +328,10 @@ const GamePlayPageUI = (function () {
             // $("#timecount").text(timeRemaining);
             document.querySelector('#timecount').innerHTML = `Time Left: <tspan>${timeRemaining}</tspan>`
 
-            console.log(Object.keys(frontEndPlayers).length);
-            if ((timeRemaining < 0) || (Object.keys(frontEndPlayers).length == 1)) {
-                start = false;
-                sounds.background.pause();
-                gameStartTime = 0;
+            if ((timeRemaining < 0)){
+              start = false;
+              sounds.background.pause();
+              gameStartTime = 0;
 
                 console.log(totalGameTime);
                 socket.emit("GameEnd");

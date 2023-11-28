@@ -289,6 +289,7 @@ const RADIUS = 10;
 let projectileId = 0;
 let ScoreBoxId = 0;
 let HitboxId = 0;
+// let check = 0;
 
 io.on('connection', (socket) => {
   console.log('a user connected')
@@ -299,13 +300,21 @@ io.on('connection', (socket) => {
     for (const id in backEndPlayers){
         gamedata[backEndPlayers[id].username] = {
             Score: backEndPlayers[id].score,
-            HPvalue: backEndPlayers[id].hp,
+            // HPvalue: backEndPlayers[id].hp,
             Hitrate: backEndPlayers[id].hitrate
         }
         // delete backEndPlayers[id];
     }
     // io.emit('updatePlayers', backEndPlayers);
     // console.log(gamedata);
+    for (const scoreId in backEndScoreBoxs){
+        delete backEndScoreBoxs[scoreId];
+    }
+    for (const hitId in backEndHitboxs){
+        delete backEndHitboxs[hitId];
+    }
+    io.emit('updateHitboxs', backEndHitboxs);
+    io.emit('updateScoreBoxs', backEndScoreBoxs);
   })
 
   socket.on('generate-hitbox', () => {
@@ -370,10 +379,10 @@ io.on('connection', (socket) => {
             sequenceNumber: 0,
             score: 0,
             username,
-            hp: 10,
+            // hp: 10,
             hitrate: 0
         }
-
+        
         // where we init our canvas
         backEndPlayers[socket.id].canvas = {
             width,
@@ -382,8 +391,15 @@ io.on('connection', (socket) => {
 
         backEndPlayers[socket.id].radius = RADIUS
 
+        // console.log("bug check")
         io.emit('start');
+        // check++;
+        // if (check > 1){
+        //     io.emit('start');
+        //     check = 0;
+        // }
     })
+
 
     socket.on('disconnect', (reason) => {
         console.log(reason)
@@ -393,7 +409,7 @@ io.on('connection', (socket) => {
 
     socket.on('cheat', ({check, socketid}) => {
         if (check){
-            backEndPlayers[socketid].hp = 10;
+            // backEndPlayers[socketid].hp = 10;
             for (const id in backEndProjectiles) {
                 if (backEndProjectiles[id].playerId == socketid){
                     backEndProjectiles[id].velocity.x = backEndProjectiles[id].velocity.x * 1.1;
@@ -507,19 +523,19 @@ setInterval(() => {
                     else if(backEndPlayers[playerId].score <= 5 && backEndPlayers[playerId].score > 0){
                         backEndPlayers[playerId].score = 0;
                     }
-                    backEndPlayers[playerId].hp--;
+                    // backEndPlayers[playerId].hp--;
                 }
                 // console.log(backEndPlayers[backEndProjectiles[id].playerId])
                 
                 delete backEndProjectiles[id]
-                if (backEndPlayers[playerId].hp <= 0){
-                    gamedata[backEndPlayers[playerId].username] = {
-                        Score: backEndPlayers[playerId].score,
-                        HPvalue: backEndPlayers[playerId].hp,
-                        Hitrate: backEndPlayers[playerId].hitrate
-                    };
-                    delete backEndPlayers[playerId];
-                }
+                // if (backEndPlayers[playerId].hp <= 0){
+                //     gamedata[backEndPlayers[playerId].username] = {
+                //         Score: backEndPlayers[playerId].score,
+                //         HPvalue: backEndPlayers[playerId].hp,
+                //         Hitrate: backEndPlayers[playerId].hitrate
+                //     };
+                //     delete backEndPlayers[playerId];
+                // }
                 break
             }
         }
@@ -579,6 +595,8 @@ setInterval(() => {
                 break
             }
         }
+
+
     }
 
     io.emit('updateHitboxs', backEndHitboxs);
