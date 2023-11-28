@@ -35,7 +35,8 @@ const GamePlayPageUI = (function() {
     let start = false;
 
     const sounds = {
-      background: new Audio("sound/game-play-music.mp3")
+      background: new Audio("sound/game-play-music.mp3"),
+      shoot: new Audio("sound/biu.mp3"),
     };
     
     const frontEndPlayers = {}
@@ -501,6 +502,9 @@ const GamePlayPageUI = (function() {
           event.clientY - top - playerPosition.y,
           event.clientX - left - playerPosition.x
         )
+
+        sounds.shoot.currentTime = 0;
+        sounds.shoot.play();
       
         socket.emit('shoot', {
           x: playerPosition.x,
