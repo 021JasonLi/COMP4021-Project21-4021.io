@@ -313,7 +313,9 @@ io.on('connection', (socket) => {
     backEndHitboxs[HitboxId] = {
         x: 1024 * Math.random(),
         y: 576 * Math.random(),
-        velocity: random_velocity
+        velocity: random_velocity,
+        radius: 10,
+        hp: 2
     }
     // console.log(backEndHitboxs);
   })
@@ -554,10 +556,15 @@ setInterval(() => {
             if (
                 DISTANCE < Hitbox_Radius + backEndProjectile.radius
             ) {
-                backEndPlayers[backEndProjectiles[ProjectileId].playerId].score += 20
                 // console.log(backEndPlayers[backEndProjectiles[id].playerId])
-                
-                delete backEndHitboxs[id]
+                let tempId = backEndProjectiles[ProjectileId].playerId;
+                delete backEndProjectiles[ProjectileId];
+                backEndHitboxs[id].hp--;
+                backEndHitboxs[id].radius -= 5;
+                if (backEndHitboxs[id].hp <= 0){
+                    backEndPlayers[tempId].score += 20
+                    delete backEndHitboxs[id]
+                }
                 break
             }
         }
