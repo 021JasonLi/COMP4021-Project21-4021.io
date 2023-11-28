@@ -41,6 +41,8 @@ const GameOverPageUI = (function() {
                 }
             })
 
+        // Hide the game play page
+        $("#game-play-page").hide();
         // Show the game over page
         $("#game-over-page").show();
     }
