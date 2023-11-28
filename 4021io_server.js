@@ -596,6 +596,7 @@ setInterval(() => {
             }
         }
 
+
     }
 
     io.emit('updateHitboxs', backEndHitboxs);
