@@ -5,6 +5,7 @@
     <title>4021.io</title>
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
 
@@ -13,11 +14,11 @@
         <div id="header" class="row">
             <div id="title">4021.io</div>
             <div class="spacer-grow"></div>
-            <div id="user-panel" class="row">
+            <div id="user-panel-over-page" class="row">
                 <div class="field-content row shadow">
                     <span class="user-name">-</span>
                 </div>
-                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+                <button id="signout-button2" class="icon"><span class="material-icons">logout</span></button>
             </div>
         </div>
         <div id="game-over-body" class="col">
@@ -28,8 +29,8 @@
                     <tr>
                         <th>Player</th>
                         <th>Score</th>
-                        <th>Kills</th>
-                        <th>Deaths</th>
+                        <th>HP</th>
+                        <th>Hit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,18 +44,19 @@
     <div id="game-play-page" class="gameplay">
         <div style="
           position: absolute;
-          color: white;
-          padding: 8px;
+          color: rgb(255, 255, 255);
+          padding: 10px;
           font-family: sans-serif;
-          font-size: 14px;
+          font-size: 15px;
           user-select: none;
-          background: rgba(0, 0, 0, 0.5);
-        ">
-            <div style="margin-bottom: 8px">Leaderboard</div>
-            <div id="playerLabels"></div>
+          background: rgba(0, 0, 0, 0.15); ">
+        <div style="margin-bottom: 8px">Leaderboard</div>
+        <div id="playerLabels"></div>
+        <div style="margin-top: 8px" id="timecount">
+            Time Left: <tspan>180</tspan>
         </div>
-        <canvas></canvas>
-
+      </div>
+      <canvas></canvas>
     </div>
 
     <div id="game-front-page" class="col">
@@ -69,24 +71,89 @@
             </div>
         </div>
         <div id="main-panel" class="row">
-            <div id="how-to-play">
-                <div id="how-to-play-text">How to play</div>
-                <div id="how-to-play-list-container">
-                    <ul id="how-to-play-list">
-                        <li>Move your character with <span class="how-to-play-important">W</span> <span class="how-to-play-important">S</span> <span class="how-to-play-important">A</span> <span class="how-to-play-important">D</span> </li>
-                        <li>Shoot bullet to others by <span class="how-to-play-important">left click</span></li>
-                        <li>Get random effect by <span class="how-to-play-important">touching the box</span></li>
-                        <li>Get extra scores by <span class="how-to-play-important">killing monster</span></li>
-                        <li>You have <span class="how-to-play-important">10</span> lifes and you <span class="how-to-play-important">die</span> if you lose all your lifes</li>
-                        <li>You get <span class="how-to-play-important">3</span> points for killing player</li>
-                        <li>You lose <span class="how-to-play-important">1</span> points when you die</li>
-                        <li>You have <span class="how-to-play-important">3</span> minutes</li>
-                        <li>Game will end early when <span class="how-to-play-important">only 1 player alive</span></li>
-                        <li><span class="how-to-play-important">Good Luck Have Fun</span></li>
-                    </ul>
+            <div id="how-to-play" class="col">
+                <div id="how-to-play-cap" class="row">How to play
+                    <span class="material-symbols-outlined">
+                        stadia_controller
+                    </span>
                 </div>
+                <div id="how-to-play-list-container">
+                    <ul id="how-to-play-list" type="square">
+                        <li>Move your character with <span class="key">W</span> <span class="key">S</span> <span class="key">A</span> <span class="key">D</span> </li>
+                        <li>Shoot bullet to others by <span class="how-to-play-important">left click <span class="material-symbols-outlined">
+                            arrow_selector_tool
+                        </span></span></li>
+                        <li>You have <span class="how-to-play-important">infinite</span> lifes and you won't <span class="how-to-play-important">die <span class="material-symbols-outlined">
+                            sentiment_very_dissatisfied
+                            </span> </span></li>
+                        <li>You get <span class="how-to-play-important">1</span> point by touching the box <span class="material-icons">
+                            widgets
+                            </span></li>
+                        <li>You get <span class="how-to-play-important">20</span> points by killing monster <span class="material-symbols-outlined">
+                            bug_report
+                            </span> (they have 2 HP)</li>
+                        <li>You get <span class="how-to-play-important">10</span> points for hitting player by bullets <span class="how-to-play-important"><span class="material-symbols-outlined">
+                            sports_kabaddi
+                            </span></span></li>
+                        <li>You lose <span class="how-to-play-important">5</span> points when you get hit <span class="how-to-play-important"><span class="material-symbols-outlined">
+                            night_shelter
+                            </span>
+                            </span></li>
+                        <li>You have <span class="how-to-play-important">3</span> minutes <span class="how-to-play-important"><span class="material-symbols-outlined">
+                            timer
+                            </span></span></li>
+                    </ul>
+                    <div id="glhf">Good Luck Have Fun! <span class="material-symbols-outlined">
+                        celebration
+                        </span></div>
+                </div>
+                <!-- <div id="movement-control" class="row">
+                    <div class="caption">Press</div>
+                    <div id="key-group" class="row">
+                        <div class="key">W</div>
+                        <div class="key">A</div>
+                        <div class="key">S</div>
+                        <div class="key">D</div>
+                    </div>
+                    <div class="caption">to move your character</div>
+                </div>
+                <div id="click-control" class="row">
+                    <div class="caption">Left click 
+                        <span class="material-symbols-outlined">
+                            arrow_selector_tool
+                        </span>
+                             to shoot bullet
+                    </div>
+                </div>
+                <div id="score-control" class="row">
+                    <div class="caption">Score points by killing other players 
+                        <span class="material-symbols-outlined">
+                        sentiment_very_dissatisfied
+                        </span></div>
+                </div>
+                <div id="exp-control" class="row">
+                    <div class="caption">Gain EXP 
+                        <span class="material-symbols-outlined">
+                            sprint
+                        </span>
+                        by shooting XP boxes</div>
+                </div>
+                <div id="level-control" class="row">
+                    <div class="caption">Level up to gain more HP 
+                        <span class="material-icons">
+                            health_and_safety
+                        </span>
+                        and become more powerful</div>
+                </div>
+                <div id="powerup-control" class="row">
+                    <div class="caption">Shoot powerups to gain special abilities
+                        <span class="material-icons">
+                            construction
+                        </span>
+                    </div>
+                </div> -->
                 <div id="ready-group" class="row">
-                    <div id="ready-text" class="row">Ready to play?</div>
+                    <div id="ready-text">Ready to play?</div>
                     <button id="ready-button">I am ready!</button>
                 </div>
 
@@ -100,30 +167,59 @@
 
     <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
-            <form id="signin-form" class="col">
-                <div class="caption">SIGN IN WITH YOUR ACCOUNT</div>
-                <div class="spacer-0"></div>
-                <input id="signin-username" placeholder="Enter your username"></input>
-                <input id="signin-password" type="password" placeholder="Enter your password"></input>
-                <div class="spacer-0"></div>
-                <button type="submit">Sign In</button>
-                <div id="signin-message" class="warning center"></div>
-                <div class="spacer-grow"></div>
-            </form>
+            <div class="col">
+                <svg xmlns="http://www.w3.org/2000/svg" id="titlesvg">
+                    <defs>
+                        <linearGradient id="title-fill" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0" stop-color="#005AA1" />
+                            <stop offset="0.4" stop-color="#88C1D4" />
+                            <stop offset="0.6" stop-color="lightblue" />
+                            <stop offset="1" stop-color="purple" />
+                        </linearGradient>
+                    </defs>
+                    <text x="50%" y="70%">
+                        4021.io
+                    </text>
+                </svg>
 
-            <div class="spacer-0"></div>
+                <div class="spacer-0"></div>
 
-            <form id="register-form" class="col">
-                <div class="caption">OR, REGISTER IF YOU DO NOT HAVE ONE</div>
-                <div class="spacer-0"></div>
-                <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
-                <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
-                <input id="register-password" type="password" placeholder="Enter your password"></input>
-                <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
-                <div class="spacer-0"></div>
-                <button type="submit">Register</button>
-                <div id="register-message" class="warning center"></div>
-            </form>
+                <div class="row">
+                    <form id="signin-form" class="col">
+                        <div class="caption">SIGN IN YOUR ACCOUNT</div>
+                        <div class="spacer-0"></div>
+                        <input id="signin-username" placeholder="Enter your username"></input>
+                        <input id="signin-password" type="password" placeholder="Enter your password"></input>
+                        <div class="spacer-0"></div>
+                        <button type="submit">Sign In</button>
+                        <div id="signin-message" class="warning center"></div>
+                        <div class="spacer-grow"></div>
+                        <div class="row">
+                        	<div class="caption-s">No account?</div>
+                        	<div class="spacer-0"></div>
+                        	<button id="register-button" type="button" class="button-s">Register</button>
+                        </div>
+                    </form>
+
+                    <form id="register-form" class="col">
+                        <div class="caption">REGISTER A NEW ACCOUNT</div>
+                        <div class="spacer-0"></div>
+                        <input id="register-username" maxlength="10" placeholder="Enter your username"></input>
+                        <input id="register-name" maxlength="16" placeholder="Enter your name"></input>
+                        <input id="register-password" type="password" placeholder="Enter your password"></input>
+                        <input id="register-confirm" type="password" placeholder="Enter your password again"></input>
+                        <div class="spacer-0"></div>
+                        <button type="submit">Register</button>
+                        <div id="register-message" class="warning center"></div>
+                        <div class="spacer-grow"></div>
+                        <div class="row">
+                            <div class="caption-s">Already have one?</div>
+                            <div class="spacer-0"></div>
+                            <button id="signin-button" type="button" class="button-s">Sign In</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -154,16 +250,13 @@
                 () => {
                     SignInForm.hide();
                     UserPanel.update(Authentication.getUser());
+                    UserPanelOverPage.update(Authentication.getUser());
                     UserPanel.show();
+                    UserPanelOverPage.show();
                     Socket.connect();
                 },
                 () => { SignInForm.show(); }
             );
-
-            // Debug game over page use
-            // $("#game-front-page").hide();
-            // $("#game-over-page").show();
-            // GameOverPageUI.show();
 
         });
     </script>
