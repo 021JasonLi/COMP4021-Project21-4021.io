@@ -18,7 +18,9 @@ const SignInForm = (function() {
                 () => {
                     hide();
                     UserPanel.update(Authentication.getUser());
+                    UserPanelOverPage.update(Authentication.getUser());
                     UserPanel.show();
+                    UserPanelOverPage.show();
                     Socket.connect();
                 },
                 (error) => { $("#signin-message").text(error); }
@@ -81,6 +83,7 @@ const UserPanel = (function() {
                 () => {
                     Socket.disconnect();
                     hide();
+                    UserPanelOverPage.hide();
                     SignInForm.show();
                     $("#ready-button").prop("disabled", false);
                 }
@@ -194,7 +197,8 @@ const CountDownOverlay = (function() {
 
     // This function shows the overlay and starts the countdown
     const show = function() {
-        let timeRemaining = parseInt($("#countdown").text());
+        let timeRemaining = 3;
+        $("#countdown").text(timeRemaining);
         const countdownSound = new Audio("../sound/countdown.mp3");
 
         function countdown() {
@@ -211,6 +215,7 @@ const CountDownOverlay = (function() {
             } else {
                 $("#countdown").text("Start!");
                 GameFrontPageUI.startGame();
+                Socket.resetReady();
             }
         }
 

@@ -13,11 +13,11 @@
         <div id="header" class="row">
             <div id="title">4021.io</div>
             <div class="spacer-grow"></div>
-            <div id="user-panel" class="row">
+            <div id="user-panel-over-page" class="row">
                 <div class="field-content row shadow">
                     <span class="user-name">-</span>
                 </div>
-                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+                <button id="signout-button2" class="icon"><span class="material-icons">logout</span></button>
             </div>
         </div>
         <div id="game-over-body" class="col">
@@ -28,8 +28,8 @@
                     <tr>
                         <th>Player</th>
                         <th>Score</th>
-                        <th>Kills</th>
-                        <th>Deaths</th>
+                        <th>HP</th>
+                        <th>Hit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -155,16 +155,13 @@
                 () => {
                     SignInForm.hide();
                     UserPanel.update(Authentication.getUser());
+                    UserPanelOverPage.update(Authentication.getUser());
                     UserPanel.show();
+                    UserPanelOverPage.show();
                     Socket.connect();
                 },
                 () => { SignInForm.show(); }
             );
-
-            // Debug game over page use
-            // $("#game-front-page").hide();
-            // $("#game-over-page").show();
-            // GameOverPageUI.show();
 
         });
     </script>
