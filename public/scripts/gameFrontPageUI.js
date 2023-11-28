@@ -194,7 +194,7 @@ const CountDownOverlay = (function() {
 
     // This function shows the overlay and starts the countdown
     const show = function() {
-        let timeRemaining = parseInt($("#countdown").text());
+        let timeRemaining = 3;
         const countdownSound = new Audio("../sound/countdown.mp3");
 
         function countdown() {
