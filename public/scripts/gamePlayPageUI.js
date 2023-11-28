@@ -29,6 +29,7 @@ const GamePlayPageUI = (function() {
     const y = canvas.height / 2
 
     const totalGameTime = 180;
+    // const totalGameTime = 20;
     let gameStartTime = 0;
     let timecheck1 = 0;
     let timecheck2 = 0;
@@ -49,8 +50,8 @@ const GamePlayPageUI = (function() {
           this.y = y,
           this.radius = radius,
           this.color = color,
-          this.username = username,
-          this.hp = hp
+          this.username = username
+          // this.hp = hp
         }
       
         draw() {
@@ -228,11 +229,11 @@ const GamePlayPageUI = (function() {
     
             document.querySelector(
                 '#playerLabels'
-            ).innerHTML += `<div data-id="${id}" data-score="${backEndPlayer.score}">${backEndPlayer.username} (Score: ${backEndPlayer.score}, HP: ${backEndPlayer.hp}, Hit Rate: ${backEndPlayer.hitrate}) </div>`
+            ).innerHTML += `<div data-id="${id}" data-score="${backEndPlayer.score}">${backEndPlayer.username} (Score: ${backEndPlayer.score}, Hit Rate: ${backEndPlayer.hitrate}) </div>`
         } else {
             document.querySelector(
                 `div[data-id="${id}"]`
-            ).innerHTML = `${backEndPlayer.username} (Score: ${backEndPlayer.score}, HP: ${backEndPlayer.hp}, Hit Rate: ${backEndPlayer.hitrate})`
+            ).innerHTML = `${backEndPlayer.username} (Score: ${backEndPlayer.score}, Hit Rate: ${backEndPlayer.hitrate})`
     
             document
                 .querySelector(`div[data-id="${id}"]`)
@@ -325,8 +326,7 @@ const GamePlayPageUI = (function() {
             // $("#timecount").text(timeRemaining);
             document.querySelector('#timecount').innerHTML = `Time Left: <tspan>${timeRemaining}</tspan>`
 
-            console.log(Object.keys(frontEndPlayers).length);
-            if ((timeRemaining < 0) || (Object.keys(frontEndPlayers).length == 1)){
+            if ((timeRemaining < 0)){
               start = false;
               sounds.background.pause();
               gameStartTime = 0;

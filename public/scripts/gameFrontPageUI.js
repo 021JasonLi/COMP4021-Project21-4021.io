@@ -261,11 +261,11 @@ const GameFrontPageUI = (function() {
         // Show the game play page
         $("#game-play-page").show();
 
-        $("#game-over-page").hide();
+        // $("#game-over-page").hide();
 
         const Username = Authentication.getUser().username;
         const socket = GamePlayPageUI.getSocket();
-        const devicePixelRatio = window.devicePixelRatio || 1
+        const devicePixelRatio = window.devicePixelRatio || 1 ;
     
         canvas_width = 1024 * devicePixelRatio
         canvas_height = 576 * devicePixelRatio
@@ -276,6 +276,7 @@ const GameFrontPageUI = (function() {
             devicePixelRatio,
             username: Username
         })
+
     };
     
     return { initialize, startGame };
