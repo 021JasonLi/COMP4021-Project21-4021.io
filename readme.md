@@ -10,6 +10,8 @@ A shooting game like https://diep.io
 ## How to play
 Please refer to the front page of the game.
 
+Cheat mode: Press "left shift" to increase bullet speed.
+
 ## Credit 
 Music/Sound used:
 - F1 starting light sound: https://www.youtube.com/watch?v=FtT9IV1Q7Dg
