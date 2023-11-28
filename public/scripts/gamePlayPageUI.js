@@ -326,9 +326,12 @@ const GamePlayPageUI = (function() {
             document.querySelector('#timecount').innerHTML = `Time Left: <tspan>${timeRemaining}</tspan>`
 
             console.log(Object.keys(frontEndPlayers).length);
-            if ((timeRemaining == 0) || (Object.keys(frontEndPlayers).length == 1)){
+            if ((timeRemaining < 0) || (Object.keys(frontEndPlayers).length == 1)){
               start = false;
               sounds.background.pause();
+              gameStartTime = 0;
+
+              console.log(totalGameTime);
               socket.emit("GameEnd");
               GameOverPageUI.show();
             }

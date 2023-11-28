@@ -284,7 +284,7 @@ let HitboxId = 0;
 io.on('connection', (socket) => {
   console.log('a user connected')
 
-  io.emit('updatePlayers', backEndPlayers)
+  io.emit('updatePlayers', backEndPlayers);
 
   socket.on("GameEnd", () => {
     for (const id in backEndPlayers){
@@ -293,8 +293,10 @@ io.on('connection', (socket) => {
             HPvalue: backEndPlayers[id].hp,
             Hitrate: backEndPlayers[id].hitrate
         }
+        // delete backEndPlayers[id];
     }
-    console.log(gamedata);
+    // io.emit('updatePlayers', backEndPlayers);
+    // console.log(gamedata);
   })
 
   socket.on('generate-hitbox', () => {
