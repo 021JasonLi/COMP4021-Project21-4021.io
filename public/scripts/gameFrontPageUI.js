@@ -2,6 +2,7 @@ const SignInForm = (function() {
     // This function initializes the UI
     const initialize = function() {
         // Hide it
+        $("#register-form").hide();
         $("#signin-overlay").hide();
 
         // Submit event for the signin form
@@ -52,6 +53,16 @@ const SignInForm = (function() {
                 },
                 (error) => { $("#register-message").text(error); }
             );
+        });
+
+        $("#register-button").on("click", () => {
+            $("#register-form").show();
+            $("#signin-form").hide();
+        });
+
+        $("#signin-button").on("click", () => {
+            $("#signin-form").show();
+            $("#register-form").hide();
         });
     };
 
