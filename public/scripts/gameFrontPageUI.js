@@ -18,7 +18,9 @@ const SignInForm = (function() {
                 () => {
                     hide();
                     UserPanel.update(Authentication.getUser());
+                    UserPanelOverPage.update(Authentication.getUser());
                     UserPanel.show();
+                    UserPanelOverPage.show();
                     Socket.connect();
                 },
                 (error) => { $("#signin-message").text(error); }
@@ -81,6 +83,7 @@ const UserPanel = (function() {
                 () => {
                     Socket.disconnect();
                     hide();
+                    UserPanelOverPage.hide();
                     SignInForm.show();
                     $("#ready-button").prop("disabled", false);
                 }
