@@ -90,6 +90,15 @@ app.post("/signin", (req, res) => {
         return;
     }
 
+    // Player cannot login multiple times
+    if (onlineUsers[req.body.username]) {
+        res.json({
+            status: "error",
+            error: "You have already logged in."
+        });
+        return;
+    }
+
     // Get the JSON data from the body
     const { username, password } = req.body;
 

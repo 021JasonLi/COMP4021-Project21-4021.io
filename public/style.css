@@ -7,27 +7,39 @@
     --input-background: #eee;
 
     --overlay-background: rgba(192, 192, 192, 0.7);
-    --overlay-caption-color: red;
+    --overlay-caption-color: #5861C5;
+    --overlay-caption-color-1: #000c8f;
     --overlay-content-background: linear-gradient(white, lightblue);
 
-    --header-background: linear-gradient(to right, blue, lightblue);
-    --main-panel-background: white;
-    --online-users-panel-background: skyblue;
-    --chat-panel-background: none;
+    --header-background: linear-gradient(to right, rgb(29, 29, 203, 0.8), rgb(173, 216, 230, 0.7));
+    --main-panel-background: none;
+    --game-front-page-background: linear-gradient(127deg, rgb(197, 173, 230), rgb(197, 173, 230) 70.71%), 
+    linear-gradient(217deg, rgb(173, 215, 230), rgb(173, 216, 230) 70%), 
+                                  
+                                  linear-gradient(336deg, rgb(230, 173, 214), rgb(230, 173, 223) 70.71%);
+    --online-users-panel-background: rgb(138, 207, 235, 0.7);
+    --chat-panel-background: linear-gradient(rgb(165, 151, 219, 1), rgba(151, 169, 219, 0.2));
 
     --title-color: white;
     --caption-color: white;
+    --icon-color: rgb(27, 17, 69);
 
     --font-color: black;
     --date-color: gray;
 
     --register-form-background: silver;
-    --warning-color: red;
+    --warning-color: rgb(220, 0, 0);
 
     --button-color: white;
-    --button-background: blueviolet;
-    --button-background-hover: purple;
+    --button-background: rgb(158, 122, 193);
+    --button-background-hover: rgb(111, 60, 111);
     --button-background-disabled: gray;
+    --button-s-background: rgb(122, 144, 193);
+    --button-s-background-hover: rgb(60, 74, 111);
+    --button-s-background-disabled: gray;
+    --ready-button-background: rgb(150, 83, 179);
+    --ready-button-background-hover: rgb(72, 115, 167);
+    --ready-button-background-disabled: gray;
 }
 
 * {
@@ -106,7 +118,10 @@ body {
     font-size: 120%;
     color: var(--overlay-caption-color);
 }
-
+.caption-s {
+    font-size: 90%;
+    color: var(--overlay-caption-color-1);
+}
 .overlay .content {
     background: var(--overlay-content-background);
 }
@@ -139,12 +154,12 @@ select {
 button {
     font-weight: bold;
     height: 40px;
-    border: 1px solid black;
+    border: 0px solid black;
     color: var(--button-color);
     background: var(--button-background);
     box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
     padding: 0 20px;
-    transition: 1s background;
+    transition: 0.5s background;
     cursor: pointer;
     border-radius: 12px;
 }
@@ -185,6 +200,58 @@ button.icon:hover {
 
 button.icon:active {
     margin: 2px -2px -2px 2px;
+}
+.button-s {
+    font-weight: bold;
+    height: 25px;
+    border: 0px solid black;
+    color: var(--button-color);
+    background: var(--button-s-background);
+    box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
+    padding: 0 20px;
+    transition: 0.5s background;
+    cursor: pointer;
+    border-radius: 12px;
+}
+.button-s:hover {
+    background: var(--button-s-background-hover);
+}
+.button-s:active {
+    margin: 2px -2px -2px 2px;
+    box-shadow: 0px 0px;
+}
+.button-s:disabled {
+    background: var(--button-s-background-disabled);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+#ready-button {
+    /* font-weight: bold; */
+    font-size: 150%;
+    height: 45px;
+    border: 0px solid black;
+    color: var(--button-color);
+    background: var(--ready-button-background);
+    box-shadow: 2px 2px 2px rgb(0, 0, 0, 0.4);
+    padding: 0 20px;
+    transition: 0.5s background;
+    cursor: pointer;
+    border-radius: 12px;
+}
+#ready-button:hover {
+    background: var(--ready-button-background-hover);
+}
+#ready-button:active {
+    margin: 2px -2px -2px 2px;
+    box-shadow: 0px 0px;
+}
+#ready-button:disabled {
+    background: var(--ready-button-background-disabled);
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Data field caption and content */
@@ -228,7 +295,7 @@ button.icon:active {
 #title {
     font-family: Abel, sans-serif;
     font-size: 300%;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     color: var(--title-color);
     user-select: none;
 }
@@ -237,7 +304,12 @@ button.icon:active {
     color: var(--title-color);
     font-size: 36px;
 }
-
+#titlesvg text {
+    font-family: Abel, sans-serif;
+    font-size: 500%;
+    fill: url(#title-fill);
+    text-anchor: middle;
+}
 #user-panel {
     padding: 0;
 }
@@ -252,15 +324,54 @@ button.icon:active {
     width: 100%;
     background: var(--main-panel-background);
     align-items: start;
+    padding: 0%;
 }
 
 /* How to play */
 #how-to-play {
     flex-grow: 1;
     align-items: stretch;
+    width: 100%;
     height: 100%;
     background: var(--chat-panel-background);
     padding: 0;
+    border-radius: 12px;
+}
+
+#how-to-play .material-symbols-outlined, #how-to-play .material-icons {
+    font-size: 120%;
+    color: var(--icon-color);
+}
+
+#how-to-play-cap {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-style: italic;
+    font-size: 300%;
+    color: var(--caption-color);
+    text-align: center;
+}
+
+#how-to-play-cap .material-symbols-outlined {
+    font-size: 100%;
+    color: var(--caption-color);
+}
+
+#main-panel .caption {
+    font-size: 150%;
+    color: var(--caption-color);
+    text-align: center;
+}
+
+#glhf {
+    font-size: 180%;
+    font-family: cursive;
+    color: rgb(231, 255, 232);
+    text-align: center;
+}
+
+#ready-text {
+    font-size: 120%;
+    color: rgb(27, 22, 127);
 }
 
 #chat-area {
@@ -296,8 +407,8 @@ button.icon:active {
 
 /* Online users panel */
 #online-users-panel {
-    flex: 0 0 250px;
-    height: 100%;
+	flex: 0 0 250px;
+    /* height: 100%; */
     padding: 0;
     background: var(--online-users-panel-background);
     border-radius: 12px;
@@ -314,13 +425,11 @@ button.icon:active {
 /* Signin overlay */
 #signin-form {
     width: 270px;
-    align-self: stretch;
 }
 
 #register-form {
     width: 380px;
-    background: var(--register-form-background);
-    padding: 20px;
+    padding: 0px 20px 0px 20px;
 }
 
 /* Countdown overlay */
@@ -342,6 +451,38 @@ button.icon:active {
     align-self: stretch;
 }
 
+#game-front-page {
+    /* background-image: url(image/bg-light.jpg);
+    background-size: cover; */
+    /* background-repeat: no-repeat; */
+    /* background-position: center; */
+    /* background-attachment: fixed; */
+    height: 100%;
+    width: 100%;
+    /* padding: 0; */
+    background: linear-gradient(217deg, rgba(86, 183, 218, 0.5), rgb(173, 207, 230) 70.71%), 
+                linear-gradient(127deg, rgba(159, 110, 228, 0.5), rgb(197, 173, 230) 70.71%), 
+                linear-gradient(336deg, rgba(224, 122, 195, 0.5), rgb(230, 173, 223) 70.71%)
+    /* background: var(--game-front-page-background); */
+}
+
+.key {
+    font-family: monospace;
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+    box-shadow:
+      0 1px 1px rgba(0, 0, 0, 0.2),
+      0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+    color: #333;
+    display: inline-block;
+    font-size: 1.2em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 6px 9px;
+    white-space: nowrap;
+  }
+  
 /* game front page */
 #how-to-play-list-container {
     text-align: center;
@@ -352,17 +493,26 @@ button.icon:active {
     text-align: left;
 }
 
-#how-to-play-text {
+/* #how-to-play-text {
     font-size: 200%;
     font-weight: bold;
     color: blue;
     text-align: center;
+} */
+
+#how-to-play-list-container {
+    font-size: 130%;
+}
+
+#how-to-play-list li {
+    color: aliceblue;
+    padding: 4px;
 }
 
 .how-to-play-important {
-    font-size: 120%;
-    font-weight: bold;
-    color: red;
+    font-size: 110%;
+    /* font-weight: bold; */
+    color: rgb(255, 237, 132);
     text-align: center;
 }
 
