@@ -314,7 +314,7 @@ io.on('connection', (socket) => {
         x: 1024 * Math.random(),
         y: 576 * Math.random(),
         velocity: random_velocity,
-        radius: 10,
+        radius: 13,
         hp: 2
     }
     // console.log(backEndHitboxs);
@@ -542,7 +542,7 @@ setInterval(() => {
         backEndHitboxs[id].x += backEndHitboxs[id].velocity.x
         backEndHitboxs[id].y += backEndHitboxs[id].velocity.y
 
-        const Hitbox_Radius = 10
+        const Hitbox_Radius = backEndHitboxs[id].radius;
 
         for (const ProjectileId in backEndProjectiles) {
             const backEndProjectile = backEndProjectiles[ProjectileId]
