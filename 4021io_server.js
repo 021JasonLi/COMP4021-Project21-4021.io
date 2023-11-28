@@ -169,6 +169,30 @@ app.get("/signout", (req, res) => {
 
 });
 
+// Handle the /game-over-data endpoint
+app.get("/game-over-data", (req, res) => {
+    // Reading the users.json file
+    const players = JSON.parse(fs.readFileSync("./data/temp-players-stats.json"));
+
+    // Getting the winner
+    let highestScore = 0;
+    let winner = "";
+    for (const player in players) {
+        if (players[player].score > highestScore) {
+            highestScore = players[player].score;
+            winner = player;
+        }
+    }
+
+    // Sending a success response
+    res.json({
+        status: "success",
+        winner: winner,
+        players: players
+    });
+
+});
+
 // Create the socket server
 const httpServer = createServer(app);
 const io = new Server(httpServer, { pingInterval: 2000, pingTimeout: 5000 }); 
@@ -228,6 +252,14 @@ io.on("connection", (socket) => {
             io.emit("start game");
         }
 
+    });
+
+    socket.on("reset ready", () => {
+        // Update the ready status of the user
+        onlineUsers[socket.request.session.user.username].ready = false;
+        socket.request.session.user.ready = false;
+        // Broadcast to all clients to update user
+        io.emit("update user", JSON.stringify(socket.request.session.user));
     });
     
 });

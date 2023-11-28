@@ -10,21 +10,45 @@
 
 <body>
     <div id="game-over-page" class="col">
-        game over page
+        <div id="header" class="row">
+            <div id="title">4021.io</div>
+            <div class="spacer-grow"></div>
+            <div id="user-panel" class="row">
+                <div class="field-content row shadow">
+                    <span class="user-name">-</span>
+                </div>
+                <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
+            </div>
+        </div>
+        <div id="game-over-body" class="col">
+            <div id="game-over-message">Game Over!</div>
+            <div id="game-over-winner">-</div>
+            <table id="player-stats">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Score</th>
+                        <th>Kills</th>
+                        <th>Deaths</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- dynamically populate the table with player stats -->
+                </tbody>
+            </table>
+            <button id="play-again-button">Play again</button>
+        </div>
     </div>
 
     <div id="game-play-page" class="gameplay">
-        <div
-        style="
+        <div style="
           position: absolute;
           color: rgb(255, 255, 255);
           padding: 10px;
           font-family: sans-serif;
           font-size: 15px;
           user-select: none;
-          background: rgba(0, 0, 0, 0.15);
-        "
-      >
+          background: rgba(0, 0, 0, 0.15); ">
         <div style="margin-bottom: 8px">Leaderboard</div>
         <div id="playerLabels"></div>
         <div style="margin-top: 8px" id="timecount">
@@ -46,38 +70,27 @@
             </div>
         </div>
         <div id="main-panel" class="row">
-            <div id="how-to-play" class="col">
-                <div id="how-to-play" class="row">How to play</div>
-                <div id="movement-control" class="row">
-                    <div class="caption">Press</div>
-                    <div id="key-group" class="row">
-                        <div class="key">W</div>
-                        <div class="key">A</div>
-                        <div class="key">S</div>
-                        <div class="key">D</div>
-                    </div>
-                    <div class="caption">to move your character</div>
-                </div>
-                <div id="click-control" class="row">
-                    <div class="caption">Left click to shoot bullet</div>
-                </div>
-                <div id="score-control" class="row">
-                    <div class="caption">Score points by killing other players</div>
-                </div>
-                <div id="exp-control" class="row">
-                    <div class="caption">Gain EXP by shooting XP boxes</div>
-                </div>
-                <div id="level-control" class="row">
-                    <div class="caption">Level up to gain more HP and become more powerful</div>
-                </div>
-                <div id="powerup-control" class="row">
-                    <div class="caption">Shoot powerups to gain special abilities</div>
+            <div id="how-to-play">
+                <div id="how-to-play-text">How to play</div>
+                <div id="how-to-play-list-container">
+                    <ul id="how-to-play-list">
+                        <li>Move your character with <span class="how-to-play-important">W</span> <span class="how-to-play-important">S</span> <span class="how-to-play-important">A</span> <span class="how-to-play-important">D</span> </li>
+                        <li>Shoot bullet to others by <span class="how-to-play-important">left click</span></li>
+                        <li>Get random effect by <span class="how-to-play-important">touching the box</span></li>
+                        <li>Get extra scores by <span class="how-to-play-important">killing monster</span></li>
+                        <li>You have <span class="how-to-play-important">10</span> lifes and you <span class="how-to-play-important">die</span> if you lose all your lifes</li>
+                        <li>You get <span class="how-to-play-important">3</span> points for killing player</li>
+                        <li>You lose <span class="how-to-play-important">1</span> points when you die</li>
+                        <li>You have <span class="how-to-play-important">3</span> minutes</li>
+                        <li>Game will end early when <span class="how-to-play-important">only 1 player alive</span></li>
+                        <li><span class="how-to-play-important">Good Luck Have Fun</span></li>
+                    </ul>
                 </div>
                 <div id="ready-group" class="row">
                     <div id="ready-text" class="row">Ready to play?</div>
                     <button id="ready-button">I am ready!</button>
                 </div>
-                
+
             </div>
 
             <div id="online-users-panel" class="col">
@@ -119,12 +132,9 @@
         <div id="countdown">3</div>
     </div>
 
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"
-      integrity="sha512-kVlGhj2qFy+KBCFuvjBJTGUMxbdqJKs4yK2jh0e0VPhWUPiPC87bzm4THmaaIee3Oj7j6sDpTTgm2EPPiESqBg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.2/gsap.min.js"
+        integrity="sha512-kVlGhj2qFy+KBCFuvjBJTGUMxbdqJKs4yK2jh0e0VPhWUPiPC87bzm4THmaaIee3Oj7j6sDpTTgm2EPPiESqBg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/socket.io/socket.io.min.js"></script>
     <script src="scripts/gameFrontPageUI.js"></script>
     <script src="scripts/gamePlayPageUI.js"></script>
@@ -150,6 +160,11 @@
                 },
                 () => { SignInForm.show(); }
             );
+
+            // Debug game over page use
+            // $("#game-front-page").hide();
+            // $("#game-over-page").show();
+            // GameOverPageUI.show();
 
         });
     </script>
