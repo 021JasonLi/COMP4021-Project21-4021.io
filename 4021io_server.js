@@ -187,8 +187,8 @@ app.get("/game-over-data", (req, res) => {
     let highestScore = 0;
     let winner = "";
     for (const player in players) {
-        if (players[player].score >= highestScore) {
-            highestScore = players[player].score;
+        if (players[player].Score >= highestScore) {
+            highestScore = players[player].Score;
             winner = player;
         }
     }
