@@ -256,9 +256,20 @@ io.on('connection', (socket) => {
   socket.on('generate-hitbox', () => {
     HitboxId++
 
+    const angle = Math.atan2(
+        576 * Math.random(),
+        1024 * Math.random()
+      )
+
+    const random_velocity = {
+        x: Math.cos(angle) * 0.25,
+        y: Math.sin(angle) * 0.25
+    }
+
     backEndHitboxs[HitboxId] = {
         x: 1024 * Math.random(),
         y: 576 * Math.random(),
+        velocity: random_velocity
     }
     // console.log(backEndHitboxs);
   })
@@ -268,7 +279,7 @@ io.on('connection', (socket) => {
 
     backEndScoreBoxs[ScoreBoxId] = {
         x: 1024 * Math.random(),
-        y: 576 * Math.random(),
+        y: 576 * Math.random()
     }
     // console.log(backEndScoreBoxs);
   })
@@ -467,10 +478,10 @@ setInterval(() => {
     }
 
     for (const id in backEndHitboxs) {
-        // backEndProjectiles[id].x += backEndProjectiles[id].velocity.x
-        // backEndProjectiles[id].y += backEndProjectiles[id].velocity.y
+        backEndHitboxs[id].x += backEndHitboxs[id].velocity.x
+        backEndHitboxs[id].y += backEndHitboxs[id].velocity.y
 
-        const Hitbox_Radius = 5
+        const Hitbox_Radius = 10
 
         for (const ProjectileId in backEndProjectiles) {
             const backEndProjectile = backEndProjectiles[ProjectileId]

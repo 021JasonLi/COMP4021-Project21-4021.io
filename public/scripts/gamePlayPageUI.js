@@ -49,12 +49,12 @@ const GamePlayPageUI = (function() {
         }
       
         draw() {
-          c.font = '12px sans-serif'
-          c.fillStyle = 'white'
+          c.font = '13px sans-serif'
+          c.fillStyle = 'black'
           c.fillText(this.username, this.x - 10, this.y + 20)
           c.save()
           c.shadowColor = this.color
-          c.shadowBlur = 20
+          c.shadowBlur = 5
           c.beginPath()
           c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
           c.fillStyle = this.color
@@ -75,7 +75,7 @@ const GamePlayPageUI = (function() {
         draw() {
           c.save()
           c.shadowColor = this.color
-          c.shadowBlur = 20
+          c.shadowBlur = 5
           c.beginPath()
           c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
           c.fillStyle = this.color
@@ -121,9 +121,10 @@ const GamePlayPageUI = (function() {
         draw() {
           c.save()
           c.shadowColor = this.color
-          c.shadowBlur = 20
+          c.shadowBlur = 5
           c.beginPath()
-          c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+          // c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+          c.rect(this.x - this.radius, this.y - this.radius, this.radius*2, this.radius*2)
           c.fillStyle = this.color
           c.fill()
           c.restore()
@@ -138,9 +139,12 @@ const GamePlayPageUI = (function() {
                 frontEndHitboxs[id] = new Hitbox({
                     x: backEndHitbox.x,
                     y: backEndHitbox.y,
-                    radius: 5,
+                    radius: 10,
                     color: "black"
                 })
+            } else {
+              frontEndHitboxs[id].x += backEndHitboxs[id].velocity.x
+              frontEndHitboxs[id].y += backEndHitboxs[id].velocity.y
             }
         }
         
