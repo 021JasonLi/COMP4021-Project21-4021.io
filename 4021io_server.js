@@ -172,13 +172,13 @@ app.get("/signout", (req, res) => {
 // Handle the /game-over-data endpoint
 app.get("/game-over-data", (req, res) => {
     // Reading the users.json file
-    const players = JSON.parse(fs.readFileSync("./data/temp-players-stats.json"));
+    const players = gamedata;
 
     // Getting the winner
     let highestScore = 0;
     let winner = "";
     for (const player in players) {
-        if (players[player].score > highestScore) {
+        if (players[player].score >= highestScore) {
             highestScore = players[player].score;
             winner = player;
         }
