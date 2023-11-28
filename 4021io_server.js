@@ -7,7 +7,7 @@ const session = require("express-session");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
-const onlineUsers = {};
+const onlineUsers = {}; 
 
 // Create the Express app
 const app = express();
@@ -604,7 +604,6 @@ setInterval(() => {
     io.emit('updateProjectiles', backEndProjectiles);
     io.emit('updatePlayers', backEndPlayers);
 }, 15)
-
 
 
 // Use a web server to listen at port 8000
