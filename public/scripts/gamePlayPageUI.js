@@ -297,6 +297,7 @@ const GamePlayPageUI = (function() {
     function animate() {
         socket.on("start", () => {
             start = true;
+            sounds.background.currentTime = 0;
             sounds.background.play();
         })
         if (start){
