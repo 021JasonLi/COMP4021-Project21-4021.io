@@ -29,9 +29,9 @@ const GameOverPageUI = (function() {
                         const stats = playersStats[player];
                         const row = $("<tr></tr>");
                         const playerCell = $("<td></td>").text(player);
-                        const scoreCell = $("<td></td>").text(stats.score);
-                        const killCell = $("<td></td>").text(stats.hp);
-                        const deathCell = $("<td></td>").text(stats.hitrate);
+                        const scoreCell = $("<td></td>").text(stats.Score);
+                        const killCell = $("<td></td>").text(stats.HPvalue);
+                        const deathCell = $("<td></td>").text(stats.Hitrate);
                         row.append(playerCell);
                         row.append(scoreCell);
                         row.append(killCell);
