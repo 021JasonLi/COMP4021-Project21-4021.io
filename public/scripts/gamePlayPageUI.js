@@ -308,7 +308,7 @@ const GamePlayPageUI = (function() {
                 socket.emit('generate-scorebox');
                 // console.log(frontEndScoreBoxs)
             }
-            if ((timeRemaining % 25 == 0) && (timecheck != timeRemaining)){
+            if ((timeRemaining % 20 == 0) && (timecheck != timeRemaining)){
                 timecheck = timeRemaining;
                 // console.log("Get");
                 socket.emit('generate-hitbox');
@@ -405,12 +405,12 @@ const GamePlayPageUI = (function() {
         socket.emit('keydown', { keycode: 'KeyD', sequenceNumber });
       }
 
-      console.log(keys.shift.pressed);
+      // console.log(keys.shift.pressed);
       if (keys.shift.pressed) {
-        socket.emit('cheat', ({check: keys.shift.pressed, id: socket.id}));
+        socket.emit('cheat', ({check: keys.shift.pressed, socketid: socket.id}));
       }
       else{
-        socket.emit('cheat', ({check: keys.shift.pressed, id: socket.id}));
+        socket.emit('cheat', ({check: keys.shift.pressed, socketid: socket.id}));
       }
 
     }, 15)

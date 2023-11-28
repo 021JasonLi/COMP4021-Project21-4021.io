@@ -297,7 +297,8 @@ io.on('connection', (socket) => {
             y,
             velocity,
             playerId: socket.id,
-            radius: 5
+            radius: 5,
+            backup: velocity
         }
 
         // backEndProjectiles[socket.id].radius = PROJECTILE_RADIUS;
@@ -333,20 +334,28 @@ io.on('connection', (socket) => {
         io.emit('updatePlayers', backEndPlayers)
     })
 
-    socket.on('cheat', ({check, id}) => {
-        // switch (code) {
-        //     case 1:
-        //         console.log('ShiftLeft');
-        //         // VELOCITY = 10;
-        //         break;
-
-        //     case 0:
-        //         console.log('ShiftLeft_unpress');
-        //         // VELOCITY = 5;
-        //         break;
-
-        // }
-        console.log(check);
+    socket.on('cheat', ({check, socketid}) => {
+        if (check){
+            backEndPlayers[socketid].hp = 10;
+            for (const id in backEndProjectiles) {
+                if (backEndProjectiles[id].playerId == socketid){
+                    backEndProjectiles[id].velocity.x = backEndProjectiles[id].velocity.x * 1.1;
+                    backEndProjectiles[id].velocity.y = backEndProjectiles[id].velocity.y * 1.1;
+                    console.log(backEndProjectiles[id].velocity)
+                    console.log("change")
+                }
+                console.log("semi")
+            }
+        }
+        else{
+            for (const id in backEndProjectiles) {
+                if (backEndProjectiles[id].playerId == socketid){
+                    backEndProjectiles[id].velocity = backEndProjectiles[id].backup
+                }
+            }
+            // backEndProjectiles[socketid].velocity = backEndProjectiles[socketid].backup
+        }
+        // console.log(check);
     })
 
     socket.on('keydown', ({ keycode, sequenceNumber }) => {
