@@ -239,6 +239,7 @@ const backEndPlayers = {};
 const backEndProjectiles = {};
 const backEndScoreBoxs = {};
 const backEndHitboxs = {};
+const gamedata = {};
 
 const SPEED = 5;
 let VELOCITY = 5;
@@ -252,6 +253,17 @@ io.on('connection', (socket) => {
   console.log('a user connected')
 
   io.emit('updatePlayers', backEndPlayers)
+
+  socket.on("GameEnd", () => {
+    for (const id in backEndPlayers){
+        gamedata[backEndPlayers[id].username] = {
+            Score: backEndPlayers[id].score,
+            HPvalue: backEndPlayers[id].hp,
+            Hitrate: backEndPlayers[id].hitrate
+        }
+    }
+    console.log(gamedata);
+  })
 
   socket.on('generate-hitbox', () => {
     HitboxId++
@@ -341,10 +353,10 @@ io.on('connection', (socket) => {
                 if (backEndProjectiles[id].playerId == socketid){
                     backEndProjectiles[id].velocity.x = backEndProjectiles[id].velocity.x * 1.1;
                     backEndProjectiles[id].velocity.y = backEndProjectiles[id].velocity.y * 1.1;
-                    console.log(backEndProjectiles[id].velocity)
-                    console.log("change")
+                    // console.log(backEndProjectiles[id].velocity)
+                    // console.log("change")
                 }
-                console.log("semi")
+                // console.log("semi")
             }
         }
         else{
@@ -405,6 +417,7 @@ io.on('connection', (socket) => {
     })
 
 //   console.log(backEndPlayers);
+    // console.log(gamedata);
 })
 
 // backend ticker
@@ -455,6 +468,11 @@ setInterval(() => {
                 
                 delete backEndProjectiles[id]
                 if (backEndPlayers[playerId].hp <= 0){
+                    gamedata[backEndPlayers[playerId].username] = {
+                        Score: backEndPlayers[playerId].score,
+                        HPvalue: backEndPlayers[playerId].hp,
+                        Hitrate: backEndPlayers[playerId].hitrate
+                    };
                     delete backEndPlayers[playerId];
                 }
                 break

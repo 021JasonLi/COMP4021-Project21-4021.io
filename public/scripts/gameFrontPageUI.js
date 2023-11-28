@@ -245,6 +245,8 @@ const GameFrontPageUI = (function() {
         // Show the game play page
         $("#game-play-page").show();
 
+        $("#game-over-page").hide();
+
         const Username = Authentication.getUser().username;
         const socket = GamePlayPageUI.getSocket();
         const devicePixelRatio = window.devicePixelRatio || 1

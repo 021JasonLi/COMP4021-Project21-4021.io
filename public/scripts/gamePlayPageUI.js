@@ -13,6 +13,11 @@ const GamePlayPageUI = (function() {
         return socket;
     };
 
+    const GameEnd = function(){
+        $("#game-play-page").hide();
+        $("#game-over-page").show();
+    };
+
     const canvas = document.querySelector('canvas')
     const c = canvas.getContext('2d')
     
@@ -308,7 +313,7 @@ const GamePlayPageUI = (function() {
                 socket.emit('generate-scorebox');
                 // console.log(frontEndScoreBoxs)
             }
-            if ((timeRemaining % 20 == 0) && (timecheck != timeRemaining)){
+            if ((timeRemaining % 25 == 0) && (timecheck != timeRemaining)){
                 timecheck = timeRemaining;
                 // console.log("Get");
                 socket.emit('generate-hitbox');
@@ -316,6 +321,13 @@ const GamePlayPageUI = (function() {
             }
             // $("#timecount").text(timeRemaining);
             document.querySelector('#timecount').innerHTML = `Time Left: <tspan>${timeRemaining}</tspan>`
+
+            console.log(Object.keys(frontEndPlayers).length);
+            if ((timeRemaining == 0) || (Object.keys(frontEndPlayers).length == 1)){
+              start = false;
+              socket.emit("GameEnd");
+              GameEnd();
+            }
         }
 
 
@@ -488,18 +500,7 @@ const GamePlayPageUI = (function() {
           angle
         })
     })
-    
-    // document.querySelector('#usernameForm').addEventListener('submit', (event) => {
-    //   event.preventDefault()
-    //   document.querySelector('#usernameForm').style.display = 'none'
-    //   socket.emit('initGame', {
-    //     width: canvas.width,
-    //     height: canvas.height,
-    //     devicePixelRatio,
-    //     username: document.querySelector('#usernameInput').value
-    //   })
-    // })
 
 
-    return { initialize, getSocket};
+    return { initialize, getSocket, GameEnd };
 })();
