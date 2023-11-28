@@ -492,6 +492,7 @@ button.icon:active {
 #how-to-play-list {
     display: inline-block;
     text-align: left;
+    font-size: 70%;
 }
 
 /* #how-to-play-text {
