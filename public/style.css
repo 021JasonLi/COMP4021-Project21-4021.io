@@ -14,6 +14,7 @@
     --header-background: linear-gradient(to right, rgb(29, 29, 203, 0.8), rgb(173, 216, 230, 0.7));
     --main-panel-background: none;
     --game-front-page-background: linear-gradient(127deg, rgb(197, 173, 230), rgb(197, 173, 230) 70.71%), 
+    --game-over-page-background: linear-gradient(127deg, rgb(197, 173, 230), rgb(197, 173, 230) 70.71%), 
     linear-gradient(217deg, rgb(173, 215, 230), rgb(173, 216, 230) 70%), 
                                   
                                   linear-gradient(336deg, rgb(230, 173, 214), rgb(230, 173, 223) 70.71%);
@@ -524,6 +525,12 @@ canvas {
 }
 
 /* game over page */
+#game-over-page {
+    background: linear-gradient(217deg, rgba(86, 183, 218, 0.5), rgb(173, 207, 230) 70.71%), 
+                linear-gradient(127deg, rgba(159, 110, 228, 0.5), rgb(197, 173, 230) 70.71%), 
+                linear-gradient(336deg, rgba(224, 122, 195, 0.5), rgb(230, 173, 223) 70.71%)
+}
+
 #game-over-message {
     font-size: 300%;
     font-weight: bold;
