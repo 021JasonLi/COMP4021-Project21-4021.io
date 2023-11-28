@@ -94,7 +94,7 @@ app.post("/signin", (req, res) => {
     if (onlineUsers[req.body.username]) {
         res.json({
             status: "error",
-            error: "You are already logged in."
+            error: "You have already logged in."
         });
         return;
     }
